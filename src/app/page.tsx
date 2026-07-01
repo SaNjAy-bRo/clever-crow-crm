@@ -31,17 +31,7 @@ export default async function LoginPage({
         
         {/* Top Header */}
         <div className="flex items-center space-x-3 z-10">
-          <div className="w-11 h-11 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center p-1 shadow-lg">
-            <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="w-full h-full object-contain" />
-          </div>
-          <div>
-            <span className="text-xl font-bold tracking-tight text-white">
-              Clever Crow <span className="text-amber-400">Strategies</span>
-            </span>
-            <div className="text-[10px] tracking-widest text-slate-400 uppercase font-semibold">
-              Client Tracking & Operations
-            </div>
-          </div>
+          <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="h-10 w-auto object-contain" />
         </div>
 
         {/* Central Hero Content */}
