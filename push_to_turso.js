@@ -91,7 +91,8 @@ async function main() {
     { id: "f8d34bef-966d-41a3-89bd-6f497a9865be", email: "sanjaykumar@gmail.com", name: "Sanjay Kumar", role: "admin" },
     { id: "ee571d75-41e9-408c-bb14-535a5289202b", email: "sanjay@clevercrowstrategies.com", name: "Sanjay Kumar", role: "admin" },
     { id: "dca8c171-49c4-441d-bf1b-b20968e4aadd", email: "admin@clevercrowstrategies.com", name: "Admin User", role: "admin" },
-    { id: "d955bf37-66f7-4d22-9283-c7f2331c6885", email: "clevercrowstrategies@gmail.com", name: "Clever Crow Admin", role: "admin" }
+    { id: "d955bf37-66f7-4d22-9283-c7f2331c6885", email: "clevercrowstrategies@gmail.com", name: "Clever Crow Admin", role: "admin" },
+    { id: "sanjay-clevercrow-in-id", email: "sanjay@clevercrow.in", name: "Sanjay Kumar", role: "admin" }
   ];
 
   for (const user of whitelistedUsers) {

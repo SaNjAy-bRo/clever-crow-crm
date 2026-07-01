@@ -15,7 +15,8 @@ async function main() {
     { email: 'sanjaykumar@gmail.com', name: 'Sanjay Kumar', role: 'admin' },
     { email: 'sanjay@clevercrowstrategies.com', name: 'Sanjay Kumar', role: 'admin' },
     { email: 'admin@clevercrowstrategies.com', name: 'Admin User', role: 'admin' },
-    { email: 'clevercrowstrategies@gmail.com', name: 'Clever Crow Admin', role: 'admin' }
+    { email: 'clevercrowstrategies@gmail.com', name: 'Clever Crow Admin', role: 'admin' },
+    { email: 'sanjay@clevercrow.in', name: 'Sanjay Kumar', role: 'admin' }
   ];
 
   console.log('Seeding whitelisted users...');
