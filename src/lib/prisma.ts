@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
-import { createClient } from "@libsql/client";
 import path from "path";
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient | undefined };
@@ -16,11 +15,10 @@ let prisma: PrismaClient;
 if (isRemote) {
   // Remote Turso Database (LibSQL)
   const token = process.env.TURSO_AUTH_TOKEN;
-  const client = createClient({
+  const adapter = new PrismaLibSql({
     url: dbUrl,
     ...(token ? { authToken: token } : {}),
   });
-  const adapter = new PrismaLibSql(client as any);
   prisma = new PrismaClient({ adapter });
 } else {
   // Local SQLite Database
