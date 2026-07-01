@@ -31,7 +31,7 @@ export default async function LoginPage({
         
         {/* Top Header */}
         <div className="flex items-center space-x-3 z-10">
-          <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="h-10 w-auto object-contain" />
+          <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="h-10 w-auto object-contain bg-white px-4 py-1.5 rounded-xl shadow-md" />
         </div>
 
         {/* Central Hero Content */}
