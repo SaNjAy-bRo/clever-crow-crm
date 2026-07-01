@@ -42,22 +42,22 @@ export default async function DashboardPage() {
   });
 
   // Safely serialize Prisma Dates to JSON-compatible strings
-  const serializedClients = clients.map((client) => ({
+  const serializedClients = clients.map((client: any) => ({
     ...client,
     createdAt: client.createdAt.toISOString(),
     updatedAt: client.updatedAt.toISOString(),
-    activities: client.activities?.map((act) => ({
+    activities: client.activities?.map((act: any) => ({
       ...act,
       createdAt: act.createdAt.toISOString(),
     })),
   }));
 
-  const serializedActivities = activities.map((log) => ({
+  const serializedActivities = activities.map((log: any) => ({
     ...log,
     createdAt: log.createdAt.toISOString(),
   }));
 
-  const serializedWhitelist = whitelist.map((entry) => ({
+  const serializedWhitelist = whitelist.map((entry: any) => ({
     ...entry,
     createdAt: entry.createdAt.toISOString(),
   }));
