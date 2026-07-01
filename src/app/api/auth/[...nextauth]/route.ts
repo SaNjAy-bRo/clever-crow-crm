@@ -14,25 +14,7 @@ export const authOptions: NextAuthOptions = {
       if (!user || !user.email) {
         return false;
       }
-      
-      const emailLower = user.email.toLowerCase();
-      
-      try {
-        const whitelisted = await prisma.whitelist.findUnique({
-          where: { email: emailLower },
-        });
-        
-        if (whitelisted) {
-          console.log(`Google sign in allowed for whitelisted email: ${emailLower}`);
-          return true;
-        }
-        
-        console.log(`Google sign in rejected: Email not in whitelist: ${emailLower}`);
-        return false;
-      } catch (error) {
-        console.error("Error in google signIn callback:", error);
-        return false;
-      }
+      return true; // Allow all successful Google logins (organization security is configured on Google Console)
     },
     async jwt({ token, user }) {
       if (user && user.email) {
