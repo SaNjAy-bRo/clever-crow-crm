@@ -13,10 +13,10 @@ let prisma: PrismaClient;
 
 if (isRemote) {
   // Remote Turso Database (LibSQL)
-  const token = process.env.TURSO_AUTH_TOKEN || "";
+  const token = process.env.TURSO_AUTH_TOKEN;
   const client = createClient({
     url: dbUrl,
-    authToken: token,
+    ...(token ? { authToken: token } : {}),
   });
   const adapter = new PrismaLibSql(client as any);
   prisma = new PrismaClient({ adapter });
