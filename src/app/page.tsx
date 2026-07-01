@@ -108,7 +108,7 @@ export default async function LoginPage({
           <div className="p-4 bg-slate-950/60 rounded-2xl border border-slate-800/80 mb-6 text-xs text-slate-400 flex items-start space-x-3 leading-relaxed">
             <Shield className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
             <div>
-              <span className="font-semibold text-slate-200">Whitelist Verification Active:</span> Only predefined Clever Crow email addresses are granted access. Any external logins will be automatically rejected.
+              <span className="font-semibold text-slate-200">Google Authentication Active:</span> Authenticate with your Google account. Whitelisted emails receive Administrator permissions; all other accounts default to User role.
             </div>
           </div>
 

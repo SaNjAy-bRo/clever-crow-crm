@@ -67,10 +67,8 @@ export default async function DashboardPage() {
     where: { email: session.user.email.toLowerCase() },
   });
 
-  // If for some reason the user logged in but is no longer in the whitelist database, reject
-  if (!dbUser) {
-    redirect("/?error=AccessDenied");
-  }
+  const currentUserRole = dbUser?.role || "user";
+  const currentUserName = session.user.name || dbUser?.name || session.user.email.split("@")[0];
 
   return (
     <DashboardClient
@@ -78,8 +76,8 @@ export default async function DashboardPage() {
       initialActivities={serializedActivities}
       initialWhitelist={serializedWhitelist}
       currentUserEmail={session.user.email}
-      currentUserRole={dbUser.role}
-      currentUserName={session.user.name || dbUser.name}
+      currentUserRole={currentUserRole}
+      currentUserName={currentUserName}
     />
   );
 }
