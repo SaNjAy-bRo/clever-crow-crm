@@ -113,7 +113,7 @@ export default async function LoginPage({
           <div className="text-center lg:text-left mb-8">
             <h2 className="text-2xl font-bold text-white tracking-tight">System Sign In</h2>
             <p className="text-sm text-slate-400 mt-2">
-              Google login is temporarily disabled. Enter your whitelisted email.
+              Authenticate using your whitelisted Google account.
             </p>
           </div>
 
@@ -155,7 +155,7 @@ export default async function LoginPage({
           </div>
 
           <div className="mt-8 text-center text-xs text-slate-500 leading-relaxed font-semibold">
-            Seed emails: <code className="text-amber-400 bg-slate-950 px-1 py-0.5 rounded border border-slate-850">sanjay@clevercrowstrategies.com</code> or <code className="text-amber-400 bg-slate-950 px-1 py-0.5 rounded border border-slate-850">admin@clevercrowstrategies.com</code>
+            Contact your system administrator to authorize new Google accounts.
           </div>
         </div>
       </div>
