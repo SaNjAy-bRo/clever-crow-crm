@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Whitelist {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?  // Optional name of the user
+  role      String   @default("user") // "admin" or "user"
+  createdAt DateTime @default(now())
+}
+
+model Client {
+  id             String        @id @default(uuid())
+  name           String        // Client Name
+  phoneNumber    String        // Phone Number
+  businessName   String        // Business Name
+  address        String        // Address
+  notes          String        // Note
+  serviceDetails String        // Service Details
+  status         String        @default("lead") // "lead", "active", "completed", "inactive"
+  value          Float         @default(0.0)    // Value of the client deal
+  currency       String        @default("INR")  // Currency code: INR, USD, EUR, GBP
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  activities     ActivityLog[]
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  clientId  String?
+  client    Client?  @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  userEmail String   // Who performed the action
+  action    String   // e.g., "Created Client", "Updated Status", "Updated Details"
+  details   String   // details of the change
+  createdAt DateTime @default(now())
+}
