@@ -437,10 +437,8 @@ export default function DashboardClient({
       {/* Top Header */}
       <header className="hidden md:flex bg-slate-900 border-b border-slate-800 px-6 py-4 items-center justify-between">
         <div className="flex items-center space-x-3">
-          <div className="p-2 bg-amber-400 rounded-xl shadow-lg shadow-amber-400/10">
-            <svg className="w-5 h-5 text-slate-950 font-bold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M4 10h12" /><path d="M4 14h9" /><path d="M19 6a3 3 0 0 1-3-3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9Z" /><path d="M12 2v4" />
-            </svg>
+          <div className="w-9 h-9 relative overflow-hidden rounded-xl bg-slate-900 border border-slate-700/50 flex items-center justify-center p-1 shadow-lg">
+            <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="w-full h-full object-contain" />
           </div>
           <div>
             <h1 className="text-lg font-bold tracking-tight text-white">
@@ -471,8 +469,8 @@ export default function DashboardClient({
 
       {/* Mobile Top Header */}
       <div className="md:hidden bg-slate-900 border-b border-slate-800 px-5 py-4 flex items-center justify-between sticky top-0 z-30">
-        <div className="flex items-center space-x-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
+        <div className="flex items-center space-x-2.5">
+          <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="w-6 h-6 object-contain" />
           <span className="text-sm font-bold text-white tracking-tight">
             Clever Crow <span className="text-amber-400">Strategies</span>
           </span>

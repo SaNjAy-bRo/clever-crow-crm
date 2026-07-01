@@ -31,21 +31,8 @@ export default async function LoginPage({
         
         {/* Top Header */}
         <div className="flex items-center space-x-3 z-10">
-          <div className="p-2.5 bg-gradient-to-br from-amber-400 to-amber-500 rounded-xl shadow-lg shadow-amber-500/20">
-            <svg
-              className="w-6 h-6 text-slate-950 font-bold"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M4 10h12" />
-              <path d="M4 14h9" />
-              <path d="M19 6a3 3 0 0 1-3-3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9Z" />
-              <path d="M12 2v4" />
-            </svg>
+          <div className="w-11 h-11 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center p-1 shadow-lg">
+            <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="w-full h-full object-contain" />
           </div>
           <div>
             <span className="text-xl font-bold tracking-tight text-white">
