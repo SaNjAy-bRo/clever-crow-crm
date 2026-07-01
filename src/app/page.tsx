@@ -12,8 +12,8 @@ export default async function LoginPage({
   const session = await getServerSession(authOptions);
   const { error } = await searchParams;
 
-  // If already logged in, redirect straight to the dashboard
-  if (session && session.user) {
+  // If already logged in, redirect straight to the dashboard (unless we were sent back with an AccessDenied error)
+  if (session && session.user && !error) {
     redirect("/dashboard");
   }
 
