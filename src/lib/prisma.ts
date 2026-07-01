@@ -9,6 +9,8 @@ const globalForPrisma = global as unknown as { prisma: PrismaClient | undefined 
 const dbUrl = process.env.DATABASE_URL || "";
 const isRemote = dbUrl.startsWith("libsql://") || dbUrl.startsWith("https://") || dbUrl.startsWith("http://");
 
+console.log("Runtime DB check: isRemote =", isRemote, "| URL prefix =", dbUrl ? dbUrl.slice(0, 15) : "EMPTY");
+
 let prisma: PrismaClient;
 
 if (isRemote) {
