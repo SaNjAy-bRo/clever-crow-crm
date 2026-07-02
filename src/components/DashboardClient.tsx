@@ -519,7 +519,7 @@ export default function DashboardClient({
               
               {/* Card 1: Total Accounts */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
-                <span className="text-[10px] md:text-xs font-medium text-slate-400 uppercase tracking-wider">Total Clients</span>
+                <span className="text-xs md:text-sm font-medium text-slate-400 uppercase tracking-wider">Total Clients</span>
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-light text-white mt-1">{totalClients}</h3>
                 <div className="mt-2 text-[10px] md:text-xs text-slate-400 flex items-center space-x-1.5">
                   <span className="text-emerald-400 font-semibold">{activeClients} Active</span>
@@ -530,7 +530,7 @@ export default function DashboardClient({
 
               {/* Card 2: Revenue Pipeline */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
-                <span className="text-[10px] md:text-xs font-medium text-slate-400 uppercase tracking-wider">Pipeline</span>
+                <span className="text-xs md:text-sm font-medium text-slate-400 uppercase tracking-wider">Pipeline</span>
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-light text-amber-400 mt-1">
                   ₹{totalValueINR.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </h3>
@@ -541,7 +541,7 @@ export default function DashboardClient({
 
               {/* Card 3: Avg Deal */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
-                <span className="text-[10px] md:text-xs font-medium text-slate-400 uppercase tracking-wider">Avg Deal</span>
+                <span className="text-xs md:text-sm font-medium text-slate-400 uppercase tracking-wider">Avg Deal</span>
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-light text-white mt-1">
                   ₹{avgValueINR.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </h3>
@@ -552,7 +552,7 @@ export default function DashboardClient({
 
               {/* Card 4: Success Rate (Win Rate) */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
-                <span className="text-[10px] md:text-xs font-medium text-slate-400 uppercase tracking-wider">Success Rate</span>
+                <span className="text-xs md:text-sm font-medium text-slate-400 uppercase tracking-wider">Success Rate</span>
                 <h3 className="text-2xl md:text-3xl lg:text-4xl font-light text-white mt-1">
                   {successRate}%
                 </h3>
@@ -563,7 +563,7 @@ export default function DashboardClient({
 
               {/* Card 5: Access Status */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative col-span-2 md:col-span-1">
-                <span className="text-[10px] md:text-xs font-medium text-slate-400 uppercase tracking-wider">Access Status</span>
+                <span className="text-xs md:text-sm font-medium text-slate-400 uppercase tracking-wider">Access Status</span>
                 <h3 className="text-sm md:text-base font-normal text-emerald-400 mt-2 flex items-center space-x-1.5 uppercase">
                   <Shield className="w-4 h-4" />
                   <span>Secure Mode</span>
