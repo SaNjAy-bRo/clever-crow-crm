@@ -519,8 +519,8 @@ export default function DashboardClient({
               
               {/* Card 1: Total Accounts */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Clients</span>
-                <h3 className="text-2xl md:text-3xl font-extrabold text-white mt-1">{totalClients}</h3>
+                <span className="text-xs font-normal text-slate-400 uppercase tracking-wider">Total Clients</span>
+                <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mt-1">{totalClients}</h3>
                 <div className="mt-2 text-[10px] md:text-xs text-slate-400 flex items-center space-x-1.5">
                   <span className="text-emerald-400 font-semibold">{activeClients} Active</span>
                   <span>•</span>
@@ -530,8 +530,8 @@ export default function DashboardClient({
 
               {/* Card 2: Revenue Pipeline */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pipeline</span>
-                <h3 className="text-2xl md:text-3xl font-extrabold text-amber-400 mt-1">
+                <span className="text-xs font-normal text-slate-400 uppercase tracking-wider">Pipeline</span>
+                <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-amber-400 mt-1">
                   ₹{totalValueINR.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </h3>
                 <div className="mt-2 text-[10px] md:text-xs text-slate-400">
@@ -541,8 +541,8 @@ export default function DashboardClient({
 
               {/* Card 3: Avg Deal */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avg Deal</span>
-                <h3 className="text-2xl md:text-3xl font-extrabold text-white mt-1">
+                <span className="text-xs font-normal text-slate-400 uppercase tracking-wider">Avg Deal</span>
+                <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mt-1">
                   ₹{avgValueINR.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </h3>
                 <div className="mt-2 text-[10px] md:text-xs text-slate-400">
@@ -552,8 +552,8 @@ export default function DashboardClient({
 
               {/* Card 4: Success Rate (Win Rate) */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Success Rate</span>
-                <h3 className="text-2xl md:text-3xl font-extrabold text-white mt-1">
+                <span className="text-xs font-normal text-slate-400 uppercase tracking-wider">Success Rate</span>
+                <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mt-1">
                   {successRate}%
                 </h3>
                 <div className="mt-2 text-[10px] md:text-xs text-slate-455">
@@ -563,8 +563,8 @@ export default function DashboardClient({
 
               {/* Card 5: Access Status */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative col-span-2 md:col-span-1">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Access Status</span>
-                <h3 className="text-sm font-semibold text-emerald-400 mt-2 flex items-center space-x-1 uppercase">
+                <span className="text-xs font-normal text-slate-400 uppercase tracking-wider">Access Status</span>
+                <h3 className="text-base md:text-lg font-normal text-emerald-400 mt-2 flex items-center space-x-1 uppercase">
                   <Shield className="w-4 h-4" />
                   <span>Secure Mode</span>
                 </h3>
@@ -579,7 +579,7 @@ export default function DashboardClient({
               {/* Bar Chart Box */}
               <div className="bg-slate-900 border border-slate-800 p-5 rounded-3xl col-span-2">
                 <div className="mb-4">
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Pipeline by Stage (INR Converted)</h4>
+                  <h4 className="text-sm font-normal text-white uppercase tracking-wider">Pipeline by Stage</h4>
                 </div>
                 <div className="h-56">
                   {isMounted ? (
@@ -611,7 +611,7 @@ export default function DashboardClient({
               {/* Pie Chart Box */}
               <div className="bg-slate-900 border border-slate-800 p-5 rounded-3xl flex flex-col justify-between">
                 <div>
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Account Ratios</h4>
+                  <h4 className="text-sm font-normal text-white uppercase tracking-wider">Account Ratios</h4>
                 </div>
                 <div className="h-36 relative flex items-center justify-center">
                   {isMounted && statusPieData.length > 0 ? (
@@ -703,7 +703,7 @@ export default function DashboardClient({
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-slate-950 text-slate-400 text-[10px] font-bold uppercase tracking-widest border-b border-slate-850">
+                    <tr className="bg-slate-950 text-slate-400 text-xs font-normal uppercase tracking-widest border-b border-slate-850">
                       <th className="py-4 px-6">Client & Business</th>
                       <th className="py-4 px-6">Contact Details</th>
                       <th className="py-4 px-6">Service details</th>
@@ -738,7 +738,7 @@ export default function DashboardClient({
                             onClick={() => openClientDetails(client)}
                           >
                             <td className="py-4 px-6">
-                              <div className="font-bold text-white group-hover:text-amber-400 transition-colors">
+                              <div className="font-normal text-white text-base group-hover:text-amber-400 transition-colors">
                                 {client.name}
                               </div>
                               <div className="text-slate-400 text-xs mt-0.5">
@@ -759,7 +759,7 @@ export default function DashboardClient({
                                 {statusText}
                               </span>
                             </td>
-                            <td className="py-4 px-6 text-right font-bold text-slate-100">
+                            <td className="py-4 px-6 text-right font-normal text-slate-100 text-base">
                               {symbol}{client.value.toLocaleString(undefined, { minimumFractionDigits: 0 })}
                             </td>
                             <td className="py-4 px-6 text-right" onClick={(e) => e.stopPropagation()}>
@@ -820,7 +820,7 @@ export default function DashboardClient({
                       >
                         <div className="flex justify-between items-start">
                           <div>
-                            <h4 className="font-bold text-white text-sm">{client.name}</h4>
+                            <h4 className="font-normal text-white text-base">{client.name}</h4>
                             <span className="text-slate-450 text-xs block mt-0.5">{client.businessName}</span>
                           </div>
                           <span className={`inline-flex px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded border ${statusBg}`}>
@@ -830,7 +830,7 @@ export default function DashboardClient({
                         
                         <div className="flex justify-between items-center text-xs pt-1 border-t border-slate-900/60">
                           <span className="text-slate-400 truncate max-w-[150px]">{client.serviceDetails}</span>
-                          <span className="font-bold text-white">{symbol}{client.value.toLocaleString()}</span>
+                          <span className="font-normal text-white text-sm">{symbol}{client.value.toLocaleString()}</span>
                         </div>
                       </div>
                     );
@@ -854,7 +854,7 @@ export default function DashboardClient({
         {activeTab === "analytics" && (
           <div className="space-y-5">
             <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Pipeline by Stage (INR Converted)</h3>
+              <h3 className="text-sm font-normal text-white uppercase tracking-wider mb-4">Pipeline by Stage</h3>
               <div className="h-60">
                 {isMounted ? (
                   <ResponsiveContainer width="100%" height="100%">
@@ -883,7 +883,7 @@ export default function DashboardClient({
             </div>
 
             <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex flex-col space-y-4">
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Account Ratios</h3>
+              <h3 className="text-sm font-normal text-white uppercase tracking-wider">Account Ratios</h3>
               <div className="h-36 relative flex items-center justify-center">
                 {isMounted && statusPieData.length > 0 && (
                   <ResponsiveContainer width="100%" height="100%">
@@ -1047,7 +1047,7 @@ export default function DashboardClient({
           <div className="space-y-5">
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <h3 className="text-base font-bold text-white flex items-center space-x-2">
+                <h3 className="text-lg font-normal text-white flex items-center space-x-2">
                   <Shield className="w-5 h-5 text-amber-400" />
                   <span>Access Whitelist</span>
                 </h3>
@@ -1067,7 +1067,7 @@ export default function DashboardClient({
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse text-xs md:text-sm">
                   <thead>
-                    <tr className="bg-slate-950 text-slate-400 text-[10px] font-bold uppercase tracking-widest border-b border-slate-850">
+                    <tr className="bg-slate-950 text-slate-400 text-xs font-normal uppercase tracking-widest border-b border-slate-850">
                       <th className="py-4 px-5">User</th>
                       <th className="py-4 px-5">Email Address</th>
                       <th className="py-4 px-5 text-center">Role</th>
@@ -1082,7 +1082,7 @@ export default function DashboardClient({
                       
                       return (
                         <tr key={entry.id} className="hover:bg-slate-850/20 transition-colors">
-                          <td className="py-3.5 px-5 font-bold text-white">
+                          <td className="py-3.5 px-5 font-normal text-white text-base">
                             {entry.name || "Pending Account"}
                           </td>
                           <td className="py-3.5 px-5">
@@ -1159,7 +1159,7 @@ export default function DashboardClient({
           <div className="w-full h-[90vh] md:h-full max-w-lg bg-slate-900 border-t md:border-t-0 md:border-l border-slate-800 rounded-t-3xl md:rounded-none p-5 md:p-6 flex flex-col justify-between overflow-y-auto animate-slide-up md:animate-in md:slide-in-from-right duration-300">
             <div>
               <div className="flex justify-between items-center pb-4 border-b border-slate-800">
-                <h3 className="text-base font-bold text-white uppercase tracking-wider">Create Account</h3>
+                <h3 className="text-lg font-normal text-white uppercase tracking-wider">Create Account</h3>
                 <button
                   onClick={() => setIsAddClientOpen(false)}
                   className="p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors"
@@ -1313,7 +1313,7 @@ export default function DashboardClient({
           <div className="w-full h-[90vh] md:h-full max-w-lg bg-slate-900 border-t md:border-t-0 md:border-l border-slate-800 rounded-t-3xl md:rounded-none p-5 md:p-6 flex flex-col justify-between overflow-y-auto animate-slide-up md:animate-in md:slide-in-from-right duration-300">
             <div>
               <div className="flex justify-between items-center pb-4 border-b border-slate-800">
-                <h3 className="text-base font-bold text-white uppercase tracking-wider">Modify Account</h3>
+                <h3 className="text-lg font-normal text-white uppercase tracking-wider">Modify Account</h3>
                 <button
                   onClick={() => {
                     setIsEditClientOpen(false);
@@ -1466,7 +1466,7 @@ export default function DashboardClient({
             <div>
               <div className="flex justify-between items-center pb-4 border-b border-slate-800">
                 <div>
-                  <h3 className="text-base font-bold text-white">{selectedClient.name}</h3>
+                  <h3 className="text-lg font-normal text-white">{selectedClient.name}</h3>
                   <p className="text-xs text-slate-400 mt-0.5">{selectedClient.businessName}</p>
                 </div>
                 <button
@@ -1597,7 +1597,7 @@ export default function DashboardClient({
               <X className="w-4 h-4" />
             </button>
 
-            <h3 className="text-base font-bold text-white flex items-center space-x-2">
+            <h3 className="text-lg font-normal text-white flex items-center space-x-2">
               <Shield className="w-5 h-5 text-amber-400" />
               <span>Whitelist Account</span>
             </h3>

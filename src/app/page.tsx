@@ -36,7 +36,7 @@ export default async function LoginPage({
 
         {/* Central Hero Content */}
         <div className="my-auto py-12 lg:py-0 z-10 max-w-xl">
-          <h1 className="text-4xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
+          <h1 className="text-5xl lg:text-7xl font-light text-white leading-tight tracking-tight">
             Intelligent client <br />
             tracking for <span className="text-amber-400 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-200 bg-clip-text text-transparent">smart growth.</span>
           </h1>
@@ -84,7 +84,7 @@ export default async function LoginPage({
         <div className="w-full max-w-sm flex flex-col">
           
           <div className="text-center lg:text-left mb-8">
-            <h2 className="text-2xl font-bold text-white tracking-tight">System Sign In</h2>
+            <h2 className="text-3xl font-light text-white tracking-tight">System Sign In</h2>
             <p className="text-sm text-slate-400 mt-2">
               Authenticate using your whitelisted Google account.
             </p>
