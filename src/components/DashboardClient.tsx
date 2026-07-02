@@ -411,7 +411,7 @@ export default function DashboardClient({
     <div className="flex-1 flex flex-col bg-slate-950 text-slate-100 font-sans pb-20 md:pb-0">
       {/* Top Header */}
       <header className="hidden md:flex bg-slate-900 border-b border-slate-800 px-6 py-4 items-center justify-between">
-        <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="h-9 w-auto object-contain bg-white px-3 py-1 rounded-lg" />
+        <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="h-9 w-9 object-contain bg-white p-1 rounded-full" />
 
         <div className="flex items-center space-x-4">
           <div className="text-right">
@@ -436,7 +436,7 @@ export default function DashboardClient({
       {/* Mobile Top Header */}
       <div className="md:hidden bg-slate-900 border-b border-slate-800 px-5 py-4 flex items-center justify-between sticky top-0 z-30">
         <div className="flex items-center">
-          <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="h-7 w-auto object-contain bg-white px-2 py-0.5 rounded" />
+          <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="h-8 w-8 object-contain bg-white p-1 rounded-full" />
         </div>
         <button
           onClick={() => signOut({ callbackUrl: "/" })}
