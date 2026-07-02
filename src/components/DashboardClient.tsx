@@ -410,8 +410,8 @@ export default function DashboardClient({
   return (
     <div className="flex-1 flex flex-col bg-slate-950 text-slate-100 font-sans pb-20 md:pb-0">
       {/* Top Header */}
-      <header className="hidden md:flex bg-slate-900 border-b border-slate-800 px-6 py-4 items-center justify-between">
-        <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="h-9 w-9 object-contain bg-white p-1 rounded-full" />
+      <header className="hidden md:flex bg-slate-900 border-b border-slate-800 px-6 py-3 items-center justify-between">
+        <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="h-12 w-12 object-contain bg-white p-1.5 rounded-full" />
 
         <div className="flex items-center space-x-4">
           <div className="text-right">
@@ -434,9 +434,9 @@ export default function DashboardClient({
       </header>
 
       {/* Mobile Top Header */}
-      <div className="md:hidden bg-slate-900 border-b border-slate-800 px-5 py-4 flex items-center justify-between sticky top-0 z-30">
+      <div className="md:hidden bg-slate-900 border-b border-slate-800 px-5 py-3 flex items-center justify-between sticky top-0 z-30">
         <div className="flex items-center">
-          <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="h-8 w-8 object-contain bg-white p-1 rounded-full" />
+          <img src="/CSS.svg" alt="Clever Crow Strategies Logo" className="h-10 w-10 object-contain bg-white p-1 rounded-full" />
         </div>
         <button
           onClick={() => signOut({ callbackUrl: "/" })}
@@ -519,8 +519,8 @@ export default function DashboardClient({
               
               {/* Card 1: Total Accounts */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
-                <span className="text-xs font-normal text-slate-400 uppercase tracking-wider">Total Clients</span>
-                <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mt-1">{totalClients}</h3>
+                <span className="text-[10px] md:text-xs font-medium text-slate-400 uppercase tracking-wider">Total Clients</span>
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-light text-white mt-1">{totalClients}</h3>
                 <div className="mt-2 text-[10px] md:text-xs text-slate-400 flex items-center space-x-1.5">
                   <span className="text-emerald-400 font-semibold">{activeClients} Active</span>
                   <span>•</span>
@@ -530,8 +530,8 @@ export default function DashboardClient({
 
               {/* Card 2: Revenue Pipeline */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
-                <span className="text-xs font-normal text-slate-400 uppercase tracking-wider">Pipeline</span>
-                <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-amber-400 mt-1">
+                <span className="text-[10px] md:text-xs font-medium text-slate-400 uppercase tracking-wider">Pipeline</span>
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-light text-amber-400 mt-1">
                   ₹{totalValueINR.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </h3>
                 <div className="mt-2 text-[10px] md:text-xs text-slate-400">
@@ -541,8 +541,8 @@ export default function DashboardClient({
 
               {/* Card 3: Avg Deal */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
-                <span className="text-xs font-normal text-slate-400 uppercase tracking-wider">Avg Deal</span>
-                <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mt-1">
+                <span className="text-[10px] md:text-xs font-medium text-slate-400 uppercase tracking-wider">Avg Deal</span>
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-light text-white mt-1">
                   ₹{avgValueINR.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </h3>
                 <div className="mt-2 text-[10px] md:text-xs text-slate-400">
@@ -552,8 +552,8 @@ export default function DashboardClient({
 
               {/* Card 4: Success Rate (Win Rate) */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
-                <span className="text-xs font-normal text-slate-400 uppercase tracking-wider">Success Rate</span>
-                <h3 className="text-3xl md:text-4xl lg:text-5xl font-light text-white mt-1">
+                <span className="text-[10px] md:text-xs font-medium text-slate-400 uppercase tracking-wider">Success Rate</span>
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-light text-white mt-1">
                   {successRate}%
                 </h3>
                 <div className="mt-2 text-[10px] md:text-xs text-slate-455">
@@ -563,8 +563,8 @@ export default function DashboardClient({
 
               {/* Card 5: Access Status */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative col-span-2 md:col-span-1">
-                <span className="text-xs font-normal text-slate-400 uppercase tracking-wider">Access Status</span>
-                <h3 className="text-base md:text-lg font-normal text-emerald-400 mt-2 flex items-center space-x-1 uppercase">
+                <span className="text-[10px] md:text-xs font-medium text-slate-400 uppercase tracking-wider">Access Status</span>
+                <h3 className="text-sm md:text-base font-normal text-emerald-400 mt-2 flex items-center space-x-1.5 uppercase">
                   <Shield className="w-4 h-4" />
                   <span>Secure Mode</span>
                 </h3>
