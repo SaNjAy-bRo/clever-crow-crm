@@ -9,7 +9,7 @@ export const clientSchema = z.object({
   serviceDetails: z.string().min(1, "Service Details are required"),
   status: z.enum(["lead", "active", "completed", "inactive"]).default("lead"),
   value: z.coerce.number().nonnegative("Value must be a positive number").default(0),
-  currency: z.enum(["INR", "USD", "EUR", "GBP"]).default("INR"),
+  currency: z.enum(["INR"]).default("INR"),
 });
 
 export const whitelistSchema = z.object({

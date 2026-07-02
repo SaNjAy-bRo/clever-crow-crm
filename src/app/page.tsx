@@ -36,10 +36,6 @@ export default async function LoginPage({
 
         {/* Central Hero Content */}
         <div className="my-auto py-12 lg:py-0 z-10 max-w-xl">
-          <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-medium mb-6 animate-pulse">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-            <span>SaaS Operations Platform v1.2</span>
-          </div>
           <h1 className="text-4xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
             Intelligent client <br />
             tracking for <span className="text-amber-400 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-200 bg-clip-text text-transparent">smart growth.</span>

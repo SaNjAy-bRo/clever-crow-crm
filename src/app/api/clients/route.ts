@@ -5,10 +5,6 @@ import { prisma } from "@/lib/prisma";
 import { clientSchema } from "@/lib/validations";
 
 const getSymbol = (currency: string) => {
-  if (currency === "INR") return "₹";
-  if (currency === "USD") return "$";
-  if (currency === "EUR") return "€";
-  if (currency === "GBP") return "£";
   return "₹";
 };
 

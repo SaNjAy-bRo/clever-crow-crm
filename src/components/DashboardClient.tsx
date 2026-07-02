@@ -87,27 +87,12 @@ interface DashboardClientProps {
   currentUserName?: string | null;
 }
 
-// Exchange rates relative to INR (base currency) for consolidated total dashboard reports
-const EXCHANGE_RATES: Record<string, number> = {
-  INR: 1.0,
-  USD: 83.5,
-  EUR: 90.0,
-  GBP: 106.0
-};
-
 const getCurrencySymbol = (code: string) => {
-  switch (code) {
-    case "INR": return "₹";
-    case "USD": return "$";
-    case "EUR": return "€";
-    case "GBP": return "£";
-    default: return "₹";
-  }
+  return "₹";
 };
 
 const convertToINR = (value: number, currency: string) => {
-  const rate = EXCHANGE_RATES[currency] || 1.0;
-  return value * rate;
+  return value;
 };
 
 export default function DashboardClient({
@@ -402,26 +387,17 @@ export default function DashboardClient({
   const completedClients = clients.filter(c => c.status === "completed").length;
   
   // Consolidated Stats in Rupees (₹)
-  const totalValueINR = clients.reduce((acc, c) => acc + convertToINR(c.value, c.currency || "INR"), 0);
-  const activeValueINR = clients.filter(c => c.status === "active").reduce((acc, c) => acc + convertToINR(c.value, c.currency || "INR"), 0);
+  const totalValueINR = clients.reduce((acc, c) => acc + c.value, 0);
+  const activeValueINR = clients.filter(c => c.status === "active").reduce((acc, c) => acc + c.value, 0);
   const avgValueINR = totalClients > 0 ? totalValueINR / totalClients : 0;
   const successRate = totalClients > 0 ? Math.round((completedClients / totalClients) * 100) : 0;
 
-  // Raw totals by currency for exact breakdowns
-  const getRawTotalByCurrency = (code: string) => {
-    return clients.reduce((acc, c) => (c.currency || "INR") === code ? acc + c.value : acc, 0);
-  };
-  const inrRawTotal = getRawTotalByCurrency("INR");
-  const usdRawTotal = getRawTotalByCurrency("USD");
-  const eurRawTotal = getRawTotalByCurrency("EUR");
-  const gbpRawTotal = getRawTotalByCurrency("GBP");
-
-  // Chart Data (Values converted to INR for consistent visual comparison)
+  // Chart Data (Values in Rupees)
   const statusChartData = [
-    { name: "Leads", value: clients.filter(c => c.status === "lead").reduce((acc, c) => acc + convertToINR(c.value, c.currency || "INR"), 0) },
-    { name: "Active", value: clients.filter(c => c.status === "active").reduce((acc, c) => acc + convertToINR(c.value, c.currency || "INR"), 0) },
-    { name: "Completed", value: clients.filter(c => c.status === "completed").reduce((acc, c) => acc + convertToINR(c.value, c.currency || "INR"), 0) },
-    { name: "Inactive", value: clients.filter(c => c.status === "inactive").reduce((acc, c) => acc + convertToINR(c.value, c.currency || "INR"), 0) }
+    { name: "Leads", value: clients.filter(c => c.status === "lead").reduce((acc, c) => acc + c.value, 0) },
+    { name: "Active", value: clients.filter(c => c.status === "active").reduce((acc, c) => acc + c.value, 0) },
+    { name: "Completed", value: clients.filter(c => c.status === "completed").reduce((acc, c) => acc + c.value, 0) },
+    { name: "Inactive", value: clients.filter(c => c.status === "inactive").reduce((acc, c) => acc + c.value, 0) }
   ];
 
   const statusPieData = [
@@ -552,33 +528,25 @@ export default function DashboardClient({
                 </div>
               </div>
 
-              {/* Card 2: Revenue Pipeline (INR base) */}
-              <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden group">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pipeline (INR)</span>
+              {/* Card 2: Revenue Pipeline */}
+              <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pipeline</span>
                 <h3 className="text-2xl md:text-3xl font-extrabold text-amber-400 mt-1">
                   ₹{totalValueINR.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </h3>
-                
-                {/* Currency exact raw totals breakdown popover hover effect */}
-                <div className="mt-2 text-[9px] md:text-[10px] text-slate-400 flex flex-wrap gap-x-2 gap-y-0.5 line-clamp-1 border-t border-slate-850 pt-1.5 group-hover:hidden transition-all">
-                  {inrRawTotal > 0 && <span>₹{inrRawTotal.toLocaleString()}</span>}
-                  {usdRawTotal > 0 && <span>${usdRawTotal.toLocaleString()}</span>}
-                  {eurRawTotal > 0 && <span>€{eurRawTotal.toLocaleString()}</span>}
-                  {gbpRawTotal > 0 && <span>£{gbpRawTotal.toLocaleString()}</span>}
-                </div>
-                <div className="hidden group-hover:flex mt-2 text-[9px] text-slate-400 gap-x-2 border-t border-slate-850 pt-1.5 transition-all">
-                  <span>Rates: $1=₹83.5 | €1=₹90 | £1=₹106</span>
+                <div className="mt-2 text-[10px] md:text-xs text-slate-400">
+                  Total value in Rupees
                 </div>
               </div>
 
-              {/* Card 3: Avg Deal (INR base) */}
+              {/* Card 3: Avg Deal */}
               <div className="bg-slate-900 border border-slate-800/80 p-4 md:p-5 rounded-2xl relative overflow-hidden">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avg Deal (INR)</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avg Deal</span>
                 <h3 className="text-2xl md:text-3xl font-extrabold text-white mt-1">
                   ₹{avgValueINR.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </h3>
-                <div className="mt-2 text-[10px] md:text-xs text-slate-455">
-                  Conversions to INR applied
+                <div className="mt-2 text-[10px] md:text-xs text-slate-400">
+                  Based on {totalClients} clients
                 </div>
               </div>
 
@@ -1245,20 +1213,13 @@ export default function DashboardClient({
                     />
                   </div>
                   
-                  {/* Currency Selection Dropdown & Deal value side-by-side */}
+                  {/* Currency Selection / Deal value */}
                   <div className="space-y-1">
                     <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-455 pl-0.5">Pipeline Value</label>
-                    <div className="flex space-x-1.5">
-                      <select
-                        value={clientForm.currency}
-                        onChange={(e) => setClientForm({ ...clientForm, currency: e.target.value })}
-                        className="bg-slate-950 border border-slate-850 text-slate-100 text-xs px-2 py-3 rounded-xl focus:border-amber-400 focus:outline-none font-bold"
-                      >
-                        <option value="INR">INR (₹)</option>
-                        <option value="USD">USD ($)</option>
-                        <option value="EUR">EUR (€)</option>
-                        <option value="GBP">GBP (£)</option>
-                      </select>
+                    <div className="flex rounded-xl overflow-hidden border border-slate-850 focus-within:border-amber-400 focus-within:ring-1 focus-within:ring-amber-400 bg-slate-950">
+                      <span className="bg-slate-900 text-slate-400 text-sm px-3.5 py-3 flex items-center border-r border-slate-850 font-bold select-none">
+                        ₹
+                      </span>
                       <input
                         type="number"
                         required
@@ -1266,7 +1227,7 @@ export default function DashboardClient({
                         onChange={(e) => setClientForm({ ...clientForm, value: e.target.value })}
                         min="0"
                         placeholder="0"
-                        className="flex-1 bg-slate-950 border border-slate-850 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 text-slate-100 px-3 py-3 rounded-xl text-sm focus:outline-none transition-all"
+                        className="flex-1 bg-transparent text-slate-100 px-3.5 py-3 text-sm focus:outline-none placeholder:text-slate-650"
                       />
                     </div>
                   </div>
@@ -1405,27 +1366,20 @@ export default function DashboardClient({
                     />
                   </div>
                   
-                  {/* Currency Selection Dropdown & Deal value side-by-side */}
+                  {/* Currency Selection / Deal value */}
                   <div className="space-y-1">
                     <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-455 pl-0.5">Pipeline Value</label>
-                    <div className="flex space-x-1.5">
-                      <select
-                        value={clientForm.currency}
-                        onChange={(e) => setClientForm({ ...clientForm, currency: e.target.value })}
-                        className="bg-slate-950 border border-slate-850 text-slate-100 text-xs px-2 py-3 rounded-xl focus:border-amber-400 focus:outline-none font-bold"
-                      >
-                        <option value="INR">INR (₹)</option>
-                        <option value="USD">USD ($)</option>
-                        <option value="EUR">EUR (€)</option>
-                        <option value="GBP">GBP (£)</option>
-                      </select>
+                    <div className="flex rounded-xl overflow-hidden border border-slate-855 focus-within:border-amber-400 focus-within:ring-1 focus-within:ring-amber-400 bg-slate-950">
+                      <span className="bg-slate-900 text-slate-400 text-sm px-3.5 py-3 flex items-center border-r border-slate-855 font-bold select-none">
+                        ₹
+                      </span>
                       <input
                         type="number"
                         required
                         value={clientForm.value}
                         onChange={(e) => setClientForm({ ...clientForm, value: e.target.value })}
                         min="0"
-                        className="flex-1 bg-slate-950 border border-slate-855 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 text-slate-100 px-3.5 py-3 rounded-xl text-sm focus:outline-none transition-all"
+                        className="flex-1 bg-transparent text-slate-100 px-3.5 py-3 text-sm focus:outline-none"
                       />
                     </div>
                   </div>
