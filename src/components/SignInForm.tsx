@@ -1,12 +1,22 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isBypassLoading, setIsBypassLoading] = useState(false);
   const [email, setEmail] = useState("sanjay@clevercrow.in");
+  const [isDev, setIsDev] = useState(false);
+
+  useEffect(() => {
+    setIsDev(
+      process.env.NODE_ENV === "development" ||
+      (typeof window !== "undefined" && 
+        (window.location.hostname === "localhost" || 
+         window.location.hostname === "127.0.0.1"))
+    );
+  }, []);
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
@@ -67,25 +77,27 @@ export default function SignInForm() {
       </button>
 
       {/* Local Bypass Login for Development */}
-      <div className="pt-4 border-t border-slate-800/80 mt-4 text-left">
-        <span className="text-[10px] text-slate-500 uppercase font-black tracking-wider block mb-2">Developer Local Bypass</span>
-        <form onSubmit={handleBypassSignIn} className="space-y-3">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="sanjay@clevercrow.in"
-            className="w-full bg-slate-900 border border-slate-800 py-2.5 px-3.5 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400 font-mono"
-          />
-          <button
-            type="submit"
-            disabled={isLoading || isBypassLoading}
-            className="w-full py-2.5 bg-amber-400 hover:bg-amber-500 text-black font-bold rounded-xl text-xs transition-all active:scale-[0.98] disabled:opacity-50"
-          >
-            {isBypassLoading ? "Logging in..." : "Bypass Google Auth & Log In"}
-          </button>
-        </form>
-      </div>
+      {isDev && (
+        <div className="pt-4 border-t border-slate-800/80 mt-4 text-left">
+          <span className="text-[10px] text-slate-500 uppercase font-black tracking-wider block mb-2">Developer Local Bypass</span>
+          <form onSubmit={handleBypassSignIn} className="space-y-3">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="sanjay@clevercrow.in"
+              className="w-full bg-slate-900 border border-slate-800 py-2.5 px-3.5 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400 font-mono"
+            />
+            <button
+              type="submit"
+              disabled={isLoading || isBypassLoading}
+              className="w-full py-2.5 bg-amber-400 hover:bg-amber-500 text-black font-bold rounded-xl text-xs transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer"
+            >
+              {isBypassLoading ? "Logging in..." : "Bypass Google Auth & Log In"}
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

@@ -3,12 +3,15 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 
-export const authOptions: NextAuthOptions = {
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    }),
+const providers: any[] = [
+  GoogleProvider({
+    clientId: process.env.GOOGLE_CLIENT_ID || "",
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+  })
+];
+
+if (process.env.NODE_ENV === "development") {
+  providers.push(
     CredentialsProvider({
       id: "bypass",
       name: "Bypass Login",
@@ -50,7 +53,11 @@ export const authOptions: NextAuthOptions = {
         };
       }
     })
-  ],
+  );
+}
+
+export const authOptions: NextAuthOptions = {
+  providers,
   callbacks: {
     async signIn({ user }) {
       if (!user || !user.email) {
