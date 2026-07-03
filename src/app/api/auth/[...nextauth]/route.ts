@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 
 export const authOptions: NextAuthOptions = {
@@ -8,6 +9,39 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
+    CredentialsProvider({
+      id: "bypass",
+      name: "Bypass Login",
+      credentials: {
+        email: { label: "Email", type: "email" }
+      },
+      async authorize(credentials) {
+        const email = credentials?.email?.toLowerCase() || "sanjay@clevercrow.in";
+        
+        // Find user in whitelist
+        let whitelisted = await prisma.whitelist.findUnique({
+          where: { email }
+        });
+        
+        // Auto whitelist local users as Admin for testing ease
+        if (!whitelisted) {
+          whitelisted = await prisma.whitelist.create({
+            data: {
+              email,
+              name: "Local Tester",
+              role: "admin"
+            }
+          });
+        }
+
+        return {
+          id: email,
+          name: whitelisted.name || "Local Tester",
+          email: email,
+          image: "https://lh3.googleusercontent.com/a/default-user=s96-c"
+        };
+      }
+    })
   ],
   callbacks: {
     async signIn({ user }) {

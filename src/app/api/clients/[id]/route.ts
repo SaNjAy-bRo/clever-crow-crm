@@ -27,6 +27,21 @@ export async function GET(
         activities: {
           orderBy: { createdAt: "desc" },
         },
+        followUps: {
+          orderBy: { date: "asc" },
+        },
+        meetings: {
+          orderBy: { date: "asc" },
+        },
+        proposals: {
+          orderBy: { date: "desc" },
+        },
+        attachments: {
+          orderBy: { createdAt: "desc" },
+        },
+        checkIns: {
+          orderBy: { createdAt: "desc" },
+        },
       },
     });
 
@@ -81,28 +96,64 @@ export async function PATCH(
     if (existing.name !== data.name) changes.push(`Name: "${existing.name}" → "${data.name}"`);
     if (existing.businessName !== data.businessName) changes.push(`Business: "${existing.businessName}" → "${data.businessName}"`);
     if (existing.phoneNumber !== data.phoneNumber) changes.push(`Phone: "${existing.phoneNumber}" → "${data.phoneNumber}"`);
-    if (existing.address !== data.address) changes.push(`Address: "${existing.address}" → "${data.address}"`);
-    if (existing.notes !== data.notes) changes.push(`Notes updated`);
-    if (existing.serviceDetails !== data.serviceDetails) changes.push(`Service Details updated`);
     if (existing.status !== data.status) changes.push(`Status: "${existing.status}" → "${data.status}"`);
-    if (existing.value !== data.value || existing.currency !== data.currency) {
-      changes.push(`Value: ${getSymbol(existing.currency)}${existing.value.toLocaleString()} → ${getSymbol(data.currency)}${data.value.toLocaleString()}`);
-    }
+    if (existing.dealValue !== data.dealValue) changes.push(`Deal Value: ${existing.dealValue} → ${data.dealValue}`);
+    if (existing.isConvertedClient !== data.isConvertedClient) changes.push(`Converted to Client: ${existing.isConvertedClient} → ${data.isConvertedClient}`);
+    if (existing.score !== data.score) changes.push(`Score: ${existing.score} → ${data.score}`);
+    if (existing.temperature !== data.temperature) changes.push(`Temperature: ${existing.temperature} → ${data.temperature}`);
 
-    const detailsStr = changes.length > 0 ? changes.join(", ") : "No fields changed";
+    const detailsStr = changes.length > 0 ? changes.join(", ") : "Updated details";
 
     const client = await prisma.client.update({
       where: { id },
       data: {
         name: data.name,
-        phoneNumber: data.phoneNumber,
         businessName: data.businessName,
-        address: data.address,
-        notes: data.notes,
-        serviceDetails: data.serviceDetails,
+        phoneNumber: data.phoneNumber,
+        whatsappNumber: data.whatsappNumber || null,
+        email: data.email || null,
+        website: data.website || null,
+        instagram: data.instagram || null,
+        googleMap: data.googleMap || null,
+        city: data.city || null,
+        area: data.area || null,
+        industry: data.industry || null,
+        category: data.category || null,
+        source: data.source || null,
+        serviceInterests: data.serviceInterests || "[]",
         status: data.status,
+        address: data.address || null,
+        notes: data.notes || null,
+        serviceDetails: data.serviceDetails || null,
+
+        // Financials
         value: data.value,
         currency: data.currency,
+        dealValue: data.dealValue,
+        advanceAmount: data.advanceAmount,
+        balanceAmount: data.balanceAmount,
+        paymentStatus: data.paymentStatus,
+        invoiceStatus: data.invoiceStatus,
+        gstRequired: data.gstRequired,
+        collectionDate: data.collectionDate ? new Date(data.collectionDate) : null,
+        expectedBalanceDate: data.expectedBalanceDate ? new Date(data.expectedBalanceDate) : null,
+        dealOwnerEmail: data.dealOwnerEmail,
+        incentiveEligible: data.incentiveEligible,
+        dealStatus: data.dealStatus,
+
+        // Score
+        score: data.score,
+        temperature: data.temperature,
+        lostReason: data.lostReason,
+
+        // Conversion / Onboarding
+        isConvertedClient: data.isConvertedClient,
+        clientStartDate: data.clientStartDate ? new Date(data.clientStartDate) : null,
+        projectManager: data.projectManager,
+        projectStatus: data.projectStatus,
+        renewalDate: data.renewalDate ? new Date(data.renewalDate) : null,
+        onboardingChecklist: data.onboardingChecklist,
+
         activities: {
           create: {
             userEmail: session.user.email,
@@ -111,6 +162,14 @@ export async function PATCH(
           },
         },
       },
+      include: {
+        activities: true,
+        followUps: true,
+        meetings: true,
+        proposals: true,
+        attachments: true,
+        checkIns: true,
+      }
     });
 
     return NextResponse.json(client);

@@ -5,6 +5,8 @@ import { useState } from "react";
 
 export default function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isBypassLoading, setIsBypassLoading] = useState(false);
+  const [email, setEmail] = useState("sanjay@clevercrow.in");
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
@@ -16,12 +18,23 @@ export default function SignInForm() {
     }
   };
 
+  const handleBypassSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsBypassLoading(true);
+    try {
+      await signIn("bypass", { email, callbackUrl: "/dashboard" });
+    } catch (err) {
+      console.error("Bypass sign-in error:", err);
+      setIsBypassLoading(false);
+    }
+  };
+
   return (
     <div className="flex flex-col space-y-4 w-full">
       <button
         onClick={handleGoogleSignIn}
-        disabled={isLoading}
-        className="w-full flex items-center justify-center space-x-3 px-5 py-4 bg-white hover:bg-slate-50 text-slate-900 font-bold rounded-2xl transition-all duration-300 shadow-lg shadow-white/5 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none group border border-slate-200"
+        disabled={isLoading || isBypassLoading}
+        className="w-full flex items-center justify-center space-x-3 px-5 py-3.5 bg-white hover:bg-slate-50 text-slate-900 font-bold rounded-2xl transition-all duration-300 shadow-lg shadow-white/5 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none group border border-slate-200"
       >
         {isLoading ? (
           <div className="w-5 h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" />
@@ -52,6 +65,27 @@ export default function SignInForm() {
           </>
         )}
       </button>
+
+      {/* Local Bypass Login for Development */}
+      <div className="pt-4 border-t border-slate-800/80 mt-4 text-left">
+        <span className="text-[10px] text-slate-500 uppercase font-black tracking-wider block mb-2">Developer Local Bypass</span>
+        <form onSubmit={handleBypassSignIn} className="space-y-3">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="sanjay@clevercrow.in"
+            className="w-full bg-slate-900 border border-slate-800 py-2.5 px-3.5 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400 font-mono"
+          />
+          <button
+            type="submit"
+            disabled={isLoading || isBypassLoading}
+            className="w-full py-2.5 bg-amber-400 hover:bg-amber-500 text-black font-bold rounded-xl text-xs transition-all active:scale-[0.98] disabled:opacity-50"
+          >
+            {isBypassLoading ? "Logging in..." : "Bypass Google Auth & Log In"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

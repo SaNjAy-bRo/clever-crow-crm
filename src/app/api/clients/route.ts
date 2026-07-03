@@ -21,7 +21,21 @@ export async function GET() {
       include: {
         activities: {
           orderBy: { createdAt: "desc" },
-          take: 10,
+        },
+        followUps: {
+          orderBy: { date: "asc" },
+        },
+        meetings: {
+          orderBy: { date: "asc" },
+        },
+        proposals: {
+          orderBy: { date: "desc" },
+        },
+        attachments: {
+          orderBy: { createdAt: "desc" },
+        },
+        checkIns: {
+          orderBy: { createdAt: "desc" },
         },
       },
     });
@@ -56,22 +70,68 @@ export async function POST(request: Request) {
     const client = await prisma.client.create({
       data: {
         name: data.name,
-        phoneNumber: data.phoneNumber,
         businessName: data.businessName,
-        address: data.address,
-        notes: data.notes,
-        serviceDetails: data.serviceDetails,
-        status: data.status,
-        value: data.value,
-        currency: data.currency,
+        phoneNumber: data.phoneNumber,
+        whatsappNumber: data.whatsappNumber || null,
+        email: data.email || null,
+        website: data.website || null,
+        instagram: data.instagram || null,
+        googleMap: data.googleMap || null,
+        city: data.city || null,
+        area: data.area || null,
+        industry: data.industry || null,
+        category: data.category || "Other",
+        source: data.source || "Other",
+        serviceInterests: data.serviceInterests || "[]",
+        status: data.status || "New Prospect",
+        address: data.address || null,
+        notes: data.notes || null,
+        serviceDetails: data.serviceDetails || null,
+
+        // Financials
+        value: data.value || 0,
+        currency: data.currency || "INR",
+        dealValue: data.dealValue || 0,
+        advanceAmount: data.advanceAmount || 0,
+        balanceAmount: data.balanceAmount || 0,
+        paymentStatus: data.paymentStatus || "Pending",
+        invoiceStatus: data.invoiceStatus || "Draft",
+        gstRequired: data.gstRequired ?? false,
+        collectionDate: data.collectionDate ? new Date(data.collectionDate) : null,
+        expectedBalanceDate: data.expectedBalanceDate ? new Date(data.expectedBalanceDate) : null,
+        dealOwnerEmail: data.dealOwnerEmail || session.user.email,
+        incentiveEligible: data.incentiveEligible ?? false,
+        dealStatus: data.dealStatus || null,
+
+        // Score
+        score: data.score || 0,
+        temperature: data.temperature || "Cold",
+        lostReason: data.lostReason || null,
+
+        // Conversion / Onboarding
+        isConvertedClient: data.isConvertedClient ?? false,
+        clientStartDate: data.clientStartDate ? new Date(data.clientStartDate) : null,
+        projectManager: data.projectManager || null,
+        projectStatus: data.projectStatus || null,
+        renewalDate: data.renewalDate ? new Date(data.renewalDate) : null,
+        onboardingChecklist: data.onboardingChecklist || "{}",
+
         activities: {
           create: {
             userEmail: session.user.email,
-            action: "Created Client",
-            details: `Created client record for ${data.name} (${data.businessName}) with value ${getSymbol(data.currency)}${data.value.toLocaleString()}`,
+            action: "Created Lead",
+            details: `Created lead record for ${data.name} (${data.businessName}) via ${data.source || 'N/A'}.`,
           },
         },
       },
+      include: {
+        activities: true,
+        followUps: true,
+        meetings: true,
+        proposals: true,
+        attachments: true,
+        checkIns: true,
+      }
     });
 
     return NextResponse.json(client, { status: 201 });

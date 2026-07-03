@@ -13,24 +13,192 @@ model Whitelist {
   id        String   @id @default(uuid())
   email     String   @unique
   name      String?  // Optional name of the user
-  role      String   @default("user") // "admin" or "user"
+  role      String   @default("user") // "admin", "manager", "bdm", "telecaller", "team_member"
   createdAt DateTime @default(now())
 }
 
 model Client {
-  id             String        @id @default(uuid())
-  name           String        // Client Name
-  phoneNumber    String        // Phone Number
-  businessName   String        // Business Name
-  address        String        // Address
-  notes          String        // Note
-  serviceDetails String        // Service Details
-  status         String        @default("lead") // "lead", "active", "completed", "inactive"
-  value          Float         @default(0.0)    // Value of the client deal
-  currency       String        @default("INR")  // Currency code: INR, USD, EUR, GBP
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  activities     ActivityLog[]
+  id                  String        @id @default(uuid())
+  name                String        // Contact person name
+  businessName        String        // Business Name
+  phoneNumber         String        // Phone Number
+  whatsappNumber      String?       // WhatsApp number
+  email               String?       // Email ID
+  website             String?       // Website URL
+  instagram           String?       // Instagram link
+  googleMap           String?       // Google Map link
+  city                String?       // City
+  area                String?       // Area / location
+  industry            String?       // Industry
+  category            String?       // Business Type (Hotel, Resort, E-commerce, etc.)
+  source              String?       // Lead Source (Google Maps, Referral, Cold call, etc.)
+  serviceInterests    String        @default("[]") // Service Interest (JSON array of strings)
+  status              String        @default("New Prospect") // Lead status pipeline stage
+  address             String?       // Physical Address
+  notes               String?       // Lead Notes
+  serviceDetails      String?       // Service details
+
+  // Revenue & Deal tracking
+  value               Float         @default(0.0)    // Value of the client deal
+  currency            String        @default("INR")  // Currency code
+  dealValue           Float         @default(0.0)
+  advanceAmount       Float         @default(0.0)
+  balanceAmount       Float         @default(0.0)
+  paymentStatus       String        @default("Pending") // Payment status
+  invoiceStatus       String        @default("Draft") // Invoice status
+  gstRequired         Boolean       @default(false)
+  collectionDate      DateTime?
+  expectedBalanceDate DateTime?
+  dealOwnerEmail      String?       // User email of the BDM who owns it
+  incentiveEligible   Boolean       @default(false)
+  dealStatus          String?       // Won but payment pending, Advance received, Work started, Balance pending, Fully collected, Lost
+
+  // Lead Scoring & Temperature
+  score               Int           @default(0)
+  temperature         String        @default("Cold") // Hot, Warm, Cold
+  lostReason          String?       // Reason if closed lost
+
+  // Client Conversion & Onboarding
+  isConvertedClient   Boolean       @default(false)
+  clientStartDate     DateTime?
+  projectManager      String?
+  projectStatus       String?
+  renewalDate         DateTime?
+  onboardingChecklist String        @default("{}") // JSON string containing onboarding checkbox states
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  activities          ActivityLog[]
+  followUps           FollowUp[]
+  meetings            Meeting[]
+  proposals           Proposal[]
+  checkIns            CheckIn[]
+  attachments         Attachment[]
+
+  @@index([dealOwnerEmail])
+  @@index([status])
+  @@index([temperature])
+}
+
+model FollowUp {
+  id          String   @id @default(uuid())
+  clientId    String
+  client      Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  date        DateTime
+  type        String   // Call, WhatsApp, Email, Meeting, Site visit, Proposal follow-up
+  notes       String
+  nextAction  String
+  status      String   @default("Pending") // Pending, Completed, Missed, Rescheduled, No response, Call back later
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([clientId])
+  @@index([date])
+  @@index([status])
+}
+
+model Meeting {
+  id                 String    @id @default(uuid())
+  clientId           String
+  client             Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  date               DateTime
+  type               String    // Phone call, Google Meet, Office meeting, Client office visit, Field visit
+  location           String?
+  agenda             String
+  notes              String?
+  requirementSummary String?
+  nextStep           String?
+  assignedTo         String    // BDM user email
+  status             String    @default("Scheduled") // Scheduled, Completed, Cancelled, Rescheduled, No show
+  
+  // After Meeting Form
+  afterMeetingUpdated Boolean  @default(false)
+  clientNeeds        String?
+  budgetIdea         String?
+  urgency            String?
+  decisionMaker      String?
+  competitor         String?
+  proposalRequired   Boolean   @default(false)
+
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([clientId])
+  @@index([assignedTo])
+  @@index([date])
+  @@index([status])
+}
+
+model Proposal {
+  id                  String    @id @default(uuid())
+  clientId            String
+  client              Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  title               String
+  serviceOffered      String
+  value               Float     @default(0.0)
+  date                DateTime
+  sentBy              String    // BDM user email
+  sentTo              String    // Lead email
+  status              String    @default("Draft") // Draft, Sent, Viewed / discussed, Revision needed, Negotiation, Approved, Rejected, Closed Won, Closed Lost
+  expectedClosingDate DateTime?
+  closingProbability  Float     @default(0.0)
+  notes               String?
+  filePath            String?   // Local file path to proposal
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([clientId])
+  @@index([sentBy])
+  @@index([date])
+  @@index([status])
+}
+
+model Target {
+  id              String   @id @default(uuid())
+  bdmEmail        String
+  month           Int      // 1-12
+  year            Int
+  revenueTarget   Float    @default(0.0)
+  prospectTarget  Int      @default(0)
+  callTarget      Int      @default(0)
+  meetingTarget   Int      @default(0)
+  proposalTarget  Int      @default(0)
+  collectionTarget Float    @default(0.0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([bdmEmail, month, year])
+}
+
+model CheckIn {
+  id         String   @id @default(uuid())
+  clientId   String
+  client     Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  bdmEmail   String
+  lat        Float?
+  lng        Float?
+  address    String?
+  photoUrl   String?
+  notes      String?
+  createdAt  DateTime @default(now())
+
+  @@index([clientId])
+  @@index([bdmEmail])
+  @@index([createdAt])
+}
+
+model Attachment {
+  id          String   @id @default(uuid())
+  clientId    String
+  client      Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  name        String
+  type        String   // Client brief, Proposal PDF, Quotation, Agreement, Brand assets, Website references, Payment screenshot, Meeting notes, Requirement document
+  url         String
+  uploadedBy  String
+  createdAt   DateTime @default(now())
+
+  @@index([clientId])
 }
 
 model ActivityLog {
@@ -41,4 +209,8 @@ model ActivityLog {
   action    String   // e.g., "Created Client", "Updated Status", "Updated Details"
   details   String   // details of the change
   createdAt DateTime @default(now())
+
+  @@index([clientId])
+  @@index([userEmail])
+  @@index([createdAt])
 }
