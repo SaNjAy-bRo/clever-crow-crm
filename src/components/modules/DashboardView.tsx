@@ -18,6 +18,12 @@ import {
   FileCheck,
   IndianRupee
 } from "lucide-react";
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
+} from "recharts";
 
 interface DashboardViewProps {
   clients: any[];
@@ -120,13 +126,27 @@ export default function DashboardView({
   };
 
   const [greeting, setGreeting] = React.useState("Good day");
+  const [isMounted, setIsMounted] = React.useState(false);
 
   React.useEffect(() => {
     const hr = new Date().getHours();
     if (hr < 12) setGreeting("Good morning");
     else if (hr < 17) setGreeting("Good afternoon");
     else setGreeting("Good evening");
+    
+    setIsMounted(true);
   }, []);
+
+  const statusPieData = [
+    { name: "New", value: getStageCount("New Prospect"), color: "#fBBF24" },
+    { name: "Contacted", value: getStageCount("Contacted"), color: "#60a5fa" },
+    { name: "Interested", value: getStageCount("Interested"), color: "#f97316" },
+    { name: "Meeting", value: getStageCount("Meeting Scheduled"), color: "#a78bfa" },
+    { name: "Proposal", value: getStageCount("Proposal Sent") + getStageCount("Proposal Required"), color: "#06b6d4" },
+    { name: "Negotiation", value: getStageCount("Negotiation"), color: "#c084fc" },
+    { name: "Won", value: getStageCount("Closed Won"), color: "#34d399" },
+    { name: "Lost", value: getStageCount("Closed Lost"), color: "#f87171" }
+  ].filter(item => item.value > 0);
 
   const getFollowUpBadgeColor = (type: string) => {
     switch (type) {
@@ -396,7 +416,7 @@ export default function DashboardView({
         </div>
       </div>
 
-      {/* 7. Pipeline Summary Bar */}
+      {/* 7. Pipeline Summary Chart */}
       <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-md">
         <div className="flex justify-between items-center pb-3 border-b border-slate-800/80 mb-4">
           <h3 className="text-xs font-bold text-white uppercase tracking-wider">Pipeline Summary</h3>
@@ -405,31 +425,59 @@ export default function DashboardView({
           </button>
         </div>
 
-        <div className="grid grid-cols-5 gap-2 text-center">
-          <div className="space-y-1">
-            <span className="text-slate-500 text-[10px] uppercase font-bold block">New</span>
-            <span className="text-base font-extrabold text-white block">{getStageCount("New Prospect")}</span>
-            <div className="h-1 bg-yellow-500 rounded-full" />
+        <div className="flex flex-col sm:flex-row items-center justify-around gap-6 py-2">
+          {/* Donut Chart Container */}
+          <div className="relative flex items-center justify-center w-36 h-36 shrink-0">
+            {isMounted && statusPieData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={statusPieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={58}
+                    paddingAngle={3}
+                    dataKey="value"
+                  >
+                    {statusPieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="w-28 h-28 rounded-full border-2 border-dashed border-slate-800 flex items-center justify-center text-slate-500 text-xs">
+                No active leads
+              </div>
+            )}
+            
+            {statusPieData.length > 0 && (
+              <div className="absolute text-center flex flex-col justify-center">
+                <span className="text-2xl font-black text-white">{totalProspects}</span>
+                <span className="text-[9px] text-slate-400 uppercase tracking-widest font-semibold">Total</span>
+              </div>
+            )}
           </div>
-          <div className="space-y-1">
-            <span className="text-slate-500 text-[10px] uppercase font-bold block">Interested</span>
-            <span className="text-base font-extrabold text-white block">{getStageCount("Interested")}</span>
-            <div className="h-1 bg-orange-500 rounded-full" />
-          </div>
-          <div className="space-y-1">
-            <span className="text-slate-500 text-[10px] uppercase font-bold block">Proposal</span>
-            <span className="text-base font-extrabold text-white block">{getStageCount("Proposal Sent") + getStageCount("Proposal Required")}</span>
-            <div className="h-1 bg-blue-500 rounded-full" />
-          </div>
-          <div className="space-y-1">
-            <span className="text-slate-500 text-[10px] uppercase font-bold block">Negotiation</span>
-            <span className="text-base font-extrabold text-white block">{getStageCount("Negotiation")}</span>
-            <div className="h-1 bg-purple-500 rounded-full" />
-          </div>
-          <div className="space-y-1">
-            <span className="text-slate-500 text-[10px] uppercase font-bold block">Won</span>
-            <span className="text-base font-extrabold text-emerald-450 block">{getStageCount("Closed Won")}</span>
-            <div className="h-1 bg-emerald-500 rounded-full" />
+
+          {/* Legends */}
+          <div className="flex-1 w-full">
+            {statusPieData.length > 0 ? (
+              <div className="grid grid-cols-2 gap-2.5 text-xs">
+                {statusPieData.map((item, idx) => (
+                  <div key={idx} className="flex items-center space-x-2 bg-slate-950/40 border border-slate-850 p-2 rounded-xl transition-all hover:border-slate-700">
+                    <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+                    <span className="text-slate-350 truncate">
+                      {item.name}: <strong className="text-white font-black">{item.value}</strong>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-slate-505 text-xs text-center py-4">
+                Add clients to build your sales funnel pipeline.
+              </div>
+            )}
           </div>
         </div>
       </div>
