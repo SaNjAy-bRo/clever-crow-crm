@@ -208,18 +208,18 @@ export default function DashboardView({
           </span>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mt-4 pb-4 border-b border-slate-800/60">
-          <div>
-            <span className="text-slate-400 text-[10px] block">Target</span>
-            <span className="text-lg font-black text-white block mt-1">₹{targetRevenue.toLocaleString()}</span>
+        <div className="flex flex-col sm:grid sm:grid-cols-3 gap-3.5 sm:gap-4 mt-4 pb-4 border-b border-slate-800/60">
+          <div className="flex justify-between items-center sm:block">
+            <span className="text-slate-400 text-xs sm:text-[10px]">Target</span>
+            <span className="text-lg font-black text-white mt-0.5 sm:mt-1">₹{targetRevenue.toLocaleString()}</span>
           </div>
-          <div>
-            <span className="text-slate-400 text-[10px] block">Achieved</span>
-            <span className="text-lg font-black text-emerald-450 block mt-1">₹{monthlyRevenueCollected.toLocaleString()}</span>
+          <div className="flex justify-between items-center sm:block">
+            <span className="text-slate-400 text-xs sm:text-[10px]">Achieved</span>
+            <span className="text-lg font-black text-emerald-450 mt-0.5 sm:mt-1">₹{monthlyRevenueCollected.toLocaleString()}</span>
           </div>
-          <div className="text-right">
-            <span className="text-slate-400 text-[10px] block">Achievement</span>
-            <span className="text-lg font-black text-amber-400 block mt-1">{achievedPercent}%</span>
+          <div className="flex justify-between items-center sm:block sm:text-right">
+            <span className="text-slate-400 text-xs sm:text-[10px] sm:block">Achievement</span>
+            <span className="text-lg font-black text-amber-400 mt-0.5 sm:mt-1">{achievedPercent}%</span>
           </div>
         </div>
 
