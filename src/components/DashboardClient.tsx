@@ -14,7 +14,7 @@ import ActivitiesView from "@/components/modules/ActivitiesView";
 import ReportsView from "@/components/modules/ReportsView";
 import TemplatesView from "@/components/modules/TemplatesView";
 import WhitelistView from "@/components/modules/WhitelistView";
-import { Menu, Zap, LayoutGrid, Users, Calendar, Video, MoreHorizontal } from "lucide-react";
+import { Menu, Zap, LayoutGrid, Users, Calendar, Video, MoreHorizontal, Sun, Moon } from "lucide-react";
 
 interface Client {
   id: string;
@@ -88,6 +88,28 @@ export default function DashboardClient({
   const [clients, setClients] = useState<Client[]>(initialClients);
   const [activities, setActivities] = useState<ActivityLog[]>(initialActivities);
   const [whitelist, setWhitelist] = useState<WhitelistEntry[]>(initialWhitelist);
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") as "dark" | "light" || "dark";
+    setTheme(savedTheme);
+    if (savedTheme === "light") {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.setItem("theme", nextTheme);
+    if (nextTheme === "light") {
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+    }
+  };
   
   // Custom schedules and tables state
   const [followUps, setFollowUps] = useState<any[]>([]);
@@ -466,6 +488,8 @@ export default function DashboardClient({
         isMobileOpen={isMobileOpen}
         setIsMobileOpen={setIsMobileOpen}
         todayFollowUpCount={todayFollowUpCount}
+        theme={theme}
+        toggleTheme={toggleTheme}
       />
 
       {/* Main Content Area */}
@@ -478,12 +502,21 @@ export default function DashboardClient({
             <span className="text-xs font-black text-white tracking-widest">CLEVER CROW</span>
           </div>
           
-          <button
-            onClick={() => setIsMobileOpen(true)}
-            className="p-1.5 rounded-lg bg-slate-800 text-slate-350 hover:text-white"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-xl bg-slate-800 text-amber-450 hover:bg-slate-700 transition-all cursor-pointer"
+              title="Toggle Theme"
+            >
+              {theme === "light" ? <Moon className="w-4 h-4 text-indigo-400" /> : <Sun className="w-4 h-4 text-amber-400" />}
+            </button>
+            <button
+              onClick={() => setIsMobileOpen(true)}
+              className="p-2 rounded-xl bg-slate-800 text-slate-350 hover:text-white transition-all"
+            >
+              <Menu className="w-4 h-4" />
+            </button>
+          </div>
         </header>
 
         {/* Dynamic Client view content */}

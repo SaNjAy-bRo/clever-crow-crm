@@ -17,7 +17,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Menu,
-  X
+  X,
+  Sun,
+  Moon
 } from "lucide-react";
 
 interface SidebarProps {
@@ -31,6 +33,8 @@ interface SidebarProps {
   isMobileOpen: boolean;
   setIsMobileOpen: (val: boolean) => void;
   todayFollowUpCount: number;
+  theme: string;
+  toggleTheme: () => void;
 }
 
 export default function Sidebar({
@@ -43,7 +47,9 @@ export default function Sidebar({
   setIsCollapsed,
   isMobileOpen,
   setIsMobileOpen,
-  todayFollowUpCount
+  todayFollowUpCount,
+  theme,
+  toggleTheme
 }: SidebarProps) {
   
   const menuItems = [
@@ -143,6 +149,27 @@ export default function Sidebar({
             </button>
           );
         })}
+      </div>
+
+      {/* Theme Switcher Button */}
+      <div className="px-3 pb-2 shrink-0">
+        <button
+          onClick={toggleTheme}
+          className="w-full flex items-center justify-center space-x-3 px-3 py-2 bg-slate-800/40 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white rounded-xl transition-all active:scale-[0.98] cursor-pointer"
+          title={theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
+        >
+          {theme === "light" ? (
+            <>
+              <Moon className="w-4 h-4 text-indigo-400 shrink-0" />
+              {!isCollapsed && <span className="text-xs font-bold">Dark Theme</span>}
+            </>
+          ) : (
+            <>
+              <Sun className="w-4 h-4 text-amber-400 shrink-0" />
+              {!isCollapsed && <span className="text-xs font-bold">Light Theme</span>}
+            </>
+          )}
+        </button>
       </div>
 
       {/* Footer / Sign Out */}
