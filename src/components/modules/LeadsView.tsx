@@ -71,39 +71,173 @@ export default function LeadsView({
   const [lostLeadId, setLostLeadId] = useState<string | null>(null);
   const [lostReasonValue, setLostReasonValue] = useState("");
 
-  // GPS Location Pin State
+  // GPS Map Location Picker States
   const [gpsLoading, setGpsLoading] = useState(false);
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
+  const [tempCoords, setTempCoords] = useState<{lat: number, lng: number} | null>(null);
+  const [tempAddress, setTempAddress] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleGetLocation = () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser");
+  const mapRef = React.useRef<any>(null);
+  const markerRef = React.useRef<any>(null);
+
+  // Load Leaflet dynamically when modal opens
+  React.useEffect(() => {
+    if (!isMapModalOpen) return;
+    
+    if ((window as any).L) {
+      setMapLoaded(true);
       return;
     }
+
+    // Load stylesheet
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+    document.head.appendChild(link);
+
+    // Load Leaflet JS script
+    const script = document.createElement("script");
+    script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    script.onload = () => setMapLoaded(true);
+    document.body.appendChild(script);
+  }, [isMapModalOpen]);
+
+  // Reverse geocoding using Nominatim
+  const reverseGeocode = async (lat: number, lng: number) => {
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`, {
+        headers: {
+          "Accept-Language": "en"
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setTempAddress(data.display_name || "");
+      } else {
+        setTempAddress(`${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+      }
+    } catch (e) {
+      console.error("Geocoding error:", e);
+      setTempAddress(`${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+    }
+  };
+
+  // Search places using Nominatim
+  const handleMapSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim() || !mapRef.current) return;
     
-    setGpsLoading(true);
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setLeadForm(prev => ({
-          ...prev,
-          googleMap: `https://www.google.com/maps?q=${latitude},${longitude}`
-        }));
-        setGpsLoading(false);
-      },
-      (error) => {
-        console.error("GPS error:", error);
-        alert(`Failed to fetch location: ${error.message}`);
-        setGpsLoading(false);
-      },
-      { enableHighAccuracy: true, timeout: 10000 }
-    );
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=1`);
+      if (res.ok) {
+        const results = await res.json();
+        if (results && results.length > 0) {
+          const { lat, lon, display_name } = results[0];
+          const latitude = parseFloat(lat);
+          const longitude = parseFloat(lon);
+          
+          mapRef.current.setView([latitude, longitude], 15);
+          if (markerRef.current) {
+            markerRef.current.setLatLng([latitude, longitude]);
+          }
+          setTempCoords({ lat: latitude, lng: longitude });
+          setTempAddress(display_name);
+        } else {
+          alert("Location not found");
+        }
+      }
+    } catch (err) {
+      console.error("Map search error:", err);
+    }
+  };
+
+  // Initialize Map Picker inside Modal
+  React.useEffect(() => {
+    if (!mapLoaded || !isMapModalOpen) return;
+
+    const timer = setTimeout(() => {
+      const L = (window as any).L;
+      if (!L) return;
+
+      if (mapRef.current) {
+        mapRef.current.remove();
+      }
+
+      // Default coords: Goa (Panjim)
+      const defaultLat = 15.4909;
+      const defaultLng = 73.8278;
+
+      const map = L.map("map-picker-container").setView([defaultLat, defaultLng], 12);
+      mapRef.current = map;
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors"
+      }).addTo(map);
+
+      // Fix CDN Leaflet marker icon asset mapping
+      const DefaultIcon = L.icon({
+        iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+        shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+      L.Marker.prototype.options.icon = DefaultIcon;
+
+      // Add draggable picker marker
+      const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
+      markerRef.current = marker;
+      setTempCoords({ lat: defaultLat, lng: defaultLng });
+
+      // Click event for pinning
+      map.on("click", (e: any) => {
+        const { lat, lng } = e.latlng;
+        marker.setLatLng([lat, lng]);
+        setTempCoords({ lat, lng });
+        reverseGeocode(lat, lng);
+      });
+
+      // Drag event for pinning
+      marker.on("dragend", (e: any) => {
+        const position = marker.getLatLng();
+        setTempCoords({ lat: position.lat, lng: position.lng });
+        reverseGeocode(position.lat, position.lng);
+      });
+
+      // Fetch browser geolocation to center immediately
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const { latitude, longitude } = pos.coords;
+            map.setView([latitude, longitude], 15);
+            marker.setLatLng([latitude, longitude]);
+            setTempCoords({ lat: latitude, lng: longitude });
+            reverseGeocode(latitude, longitude);
+          },
+          () => {
+            reverseGeocode(defaultLat, defaultLng);
+          },
+          { enableHighAccuracy: true }
+        );
+      } else {
+        reverseGeocode(defaultLat, defaultLng);
+      }
+    }, 150);
+
+    return () => clearTimeout(timer);
+  }, [mapLoaded, isMapModalOpen]);
+
+  const handleGetLocation = () => {
+    setIsMapModalOpen(true);
   };
 
   const handleMapBlur = () => {
     let val = leadForm.googleMap.trim();
     if (!val) return;
     
-    // Check for "lat, lng" coordinates input format
     const coordRegex = /^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$/;
     if (coordRegex.test(val)) {
       setLeadForm(prev => ({
@@ -845,12 +979,11 @@ export default function LeadsView({
                     <button
                       type="button"
                       onClick={handleGetLocation}
-                      disabled={gpsLoading}
-                      className="absolute right-1 bg-amber-400 hover:bg-amber-500 disabled:bg-slate-850 text-black disabled:text-slate-500 px-2 py-1.5 rounded-lg text-[9px] font-bold flex items-center space-x-1 cursor-pointer transition-all active:scale-95 border-none"
-                      title="Fetch current GPS coordinates"
+                      className="absolute right-1 bg-amber-400 hover:bg-amber-500 text-black px-2 py-1.5 rounded-lg text-[9px] font-bold flex items-center space-x-1 cursor-pointer transition-all active:scale-95 border-none"
+                      title="Locate client on interactive map"
                     >
                       <MapPin className="w-3 h-3 shrink-0" />
-                      <span>{gpsLoading ? "Locating..." : "GPS Pin"}</span>
+                      <span>Locate on Map</span>
                     </button>
                   </div>
                 </div>
@@ -1028,6 +1161,106 @@ export default function LeadsView({
               >
                 Update Leads Profile
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Map Location Picker Modal */}
+      {isMapModalOpen && (
+        <div className="fixed inset-0 z-55 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl animate-in zoom-in duration-200">
+            {/* Modal Header */}
+            <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/20">
+              <div>
+                <h3 className="text-sm font-black text-white uppercase tracking-wider">Pinpoint Client Location</h3>
+                <p className="text-[10px] text-slate-400 mt-1">Drag the marker or search to locate the client business</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsMapModalOpen(false)}
+                className="text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800/40 hover:bg-slate-800 transition-all cursor-pointer border-none"
+              >
+                <XCircle className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Map Search Form */}
+            <div className="p-4 bg-slate-950/40 border-b border-slate-800">
+              <form onSubmit={handleMapSearch} className="flex gap-2">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search city, area, hotel, or street name..."
+                  className="flex-1 bg-slate-950 border border-slate-850 px-3 py-2 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400"
+                />
+                <button
+                  type="submit"
+                  className="bg-amber-400 hover:bg-amber-500 text-black px-4 py-2 rounded-xl text-xs font-bold transition-all active:scale-95 cursor-pointer border-none"
+                >
+                  Search
+                </button>
+              </form>
+            </div>
+
+            {/* Map Container */}
+            <div className="relative">
+              <div
+                id="map-picker-container"
+                className="h-80 w-full bg-slate-950 z-10"
+                style={{ minHeight: "320px" }}
+              />
+              {!mapLoaded && (
+                <div className="absolute inset-0 bg-slate-950/80 flex items-center justify-center text-slate-400 text-xs z-20">
+                  Loading map interface...
+                </div>
+              )}
+            </div>
+
+            {/* Selected Address Info */}
+            <div className="p-4 bg-slate-950/40 border-t border-slate-800 space-y-3">
+              <div className="space-y-1">
+                <span className="text-[9px] text-slate-400 uppercase font-black tracking-wider block">Resolved Address</span>
+                <p className="text-xs text-white font-medium bg-slate-950 border border-slate-850 p-2.5 rounded-xl min-h-12 leading-relaxed">
+                  {tempAddress || "Locating coordinates..."}
+                </p>
+              </div>
+              
+              <div className="flex justify-between items-center gap-3">
+                <div className="text-[10px] text-slate-400">
+                  Coordinates: <span className="text-amber-400 font-mono font-bold">
+                    {tempCoords ? `${tempCoords.lat.toFixed(6)}, ${tempCoords.lng.toFixed(6)}` : "None"}
+                  </span>
+                </div>
+                
+                <div className="flex space-x-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setIsMapModalOpen(false)}
+                    className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all border-none cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!tempCoords}
+                    onClick={() => {
+                      if (tempCoords) {
+                        setLeadForm(prev => ({
+                          ...prev,
+                          googleMap: `https://www.google.com/maps?q=${tempCoords.lat},${tempCoords.lng}`,
+                          address: tempAddress || prev.address // Fill address field with geocoded text!
+                        }));
+                      }
+                      setIsMapModalOpen(false);
+                    }}
+                    className="px-4 py-2 rounded-xl text-xs font-bold bg-amber-400 hover:bg-amber-500 text-black transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-none"
+                  >
+                    Confirm Location
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
