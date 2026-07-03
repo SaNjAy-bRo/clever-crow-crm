@@ -71,6 +71,48 @@ export default function LeadsView({
   const [lostLeadId, setLostLeadId] = useState<string | null>(null);
   const [lostReasonValue, setLostReasonValue] = useState("");
 
+  // GPS Location Pin State
+  const [gpsLoading, setGpsLoading] = useState(false);
+
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+    
+    setGpsLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setLeadForm(prev => ({
+          ...prev,
+          googleMap: `https://www.google.com/maps?q=${latitude},${longitude}`
+        }));
+        setGpsLoading(false);
+      },
+      (error) => {
+        console.error("GPS error:", error);
+        alert(`Failed to fetch location: ${error.message}`);
+        setGpsLoading(false);
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
+
+  const handleMapBlur = () => {
+    let val = leadForm.googleMap.trim();
+    if (!val) return;
+    
+    // Check for "lat, lng" coordinates input format
+    const coordRegex = /^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$/;
+    if (coordRegex.test(val)) {
+      setLeadForm(prev => ({
+        ...prev,
+        googleMap: `https://www.google.com/maps?q=${val.replace(/\s+/g, "")}`
+      }));
+    }
+  };
+
   // BDM email list for filter
   const bdmList = whitelist.filter(u => u.role === "bdm" || u.role === "admin" || u.role === "manager");
 
@@ -790,14 +832,27 @@ export default function LeadsView({
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] text-slate-400 font-bold uppercase block mb-1">Google Maps Link</label>
-                  <input
-                    type="text"
-                    value={leadForm.googleMap}
-                    onChange={(e) => setLeadForm({ ...leadForm, googleMap: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-850 p-2.5 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400"
-                    placeholder="Google Maps URL"
-                  />
+                  <label className="text-[10px] text-slate-400 font-bold uppercase block mb-1">Google Maps Link / Coordinates</label>
+                  <div className="relative flex items-center">
+                    <input
+                      type="text"
+                      value={leadForm.googleMap}
+                      onChange={(e) => setLeadForm({ ...leadForm, googleMap: e.target.value })}
+                      onBlur={handleMapBlur}
+                      className="w-full bg-slate-950 border border-slate-850 p-2.5 pr-22 rounded-xl text-xs text-white focus:outline-none focus:border-amber-400"
+                      placeholder="e.g. 15.4909, 73.8278 or maps link"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleGetLocation}
+                      disabled={gpsLoading}
+                      className="absolute right-1 bg-amber-400 hover:bg-amber-500 disabled:bg-slate-850 text-black disabled:text-slate-500 px-2 py-1.5 rounded-lg text-[9px] font-bold flex items-center space-x-1 cursor-pointer transition-all active:scale-95 border-none"
+                      title="Fetch current GPS coordinates"
+                    >
+                      <MapPin className="w-3 h-3 shrink-0" />
+                      <span>{gpsLoading ? "Locating..." : "GPS Pin"}</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
