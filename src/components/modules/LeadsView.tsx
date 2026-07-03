@@ -34,6 +34,8 @@ interface LeadsViewProps {
   onAddLead: (lead: any) => Promise<void>;
   onUpdateLead: (id: string, lead: any) => Promise<void>;
   onDeleteLead: (id: string) => Promise<void>;
+  isAddOpen: boolean;
+  setIsAddOpen: (val: boolean) => void;
 }
 
 export default function LeadsView({
@@ -43,7 +45,9 @@ export default function LeadsView({
   whitelist,
   onAddLead,
   onUpdateLead,
-  onDeleteLead
+  onDeleteLead,
+  isAddOpen,
+  setIsAddOpen
 }: LeadsViewProps) {
   // Filters & Search States
   const [searchTerm, setSearchTerm] = useState("");
@@ -60,7 +64,6 @@ export default function LeadsView({
   // Lead Details Panel / Modal
   const [selectedLead, setSelectedLead] = useState<any | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [isAddOpen, setIsAddOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   
   // Lost Reason Modal State

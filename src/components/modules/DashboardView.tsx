@@ -30,6 +30,7 @@ interface DashboardViewProps {
   userEmail: string;
   userName: string;
   setActiveTab: (tab: string) => void;
+  onOpenAddLead?: () => void;
 }
 
 export default function DashboardView({
@@ -42,7 +43,8 @@ export default function DashboardView({
   userRole,
   userEmail,
   userName,
-  setActiveTab
+  setActiveTab,
+  onOpenAddLead
 }: DashboardViewProps) {
   
   // Date Helpers
@@ -117,13 +119,14 @@ export default function DashboardView({
     return myClients.filter(c => c.status === stage).length;
   };
 
-  // Determine Greeting based on time of day
-  const getGreeting = () => {
+  const [greeting, setGreeting] = React.useState("Good day");
+
+  React.useEffect(() => {
     const hr = new Date().getHours();
-    if (hr < 12) return "Good morning";
-    if (hr < 17) return "Good afternoon";
-    return "Good evening";
-  };
+    if (hr < 12) setGreeting("Good morning");
+    else if (hr < 17) setGreeting("Good afternoon");
+    else setGreeting("Good evening");
+  }, []);
 
   const getFollowUpBadgeColor = (type: string) => {
     switch (type) {
@@ -137,22 +140,40 @@ export default function DashboardView({
     <div className="space-y-6 animate-in fade-in duration-300 font-sans pb-10">
       
       {/* 1. Header Greeting Section */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl relative overflow-hidden shadow-md">
+      <div className="flex justify-between items-center gap-4 bg-slate-900 border border-slate-800 p-4 md:p-5 rounded-2xl relative overflow-hidden shadow-md">
         <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/5 rounded-full blur-2xl pointer-events-none" />
         <div className="min-w-0">
-          <h2 className="text-xl md:text-2xl font-light text-white leading-tight">
-            {getGreeting()}, <span className="text-amber-400 font-extrabold">{userName}</span> 👋
+          <h2 className="text-lg md:text-2xl font-light text-white leading-tight">
+            {greeting}
+            {userName && !userName.toLowerCase().includes("tester") && (
+              <>
+                , <span className="text-amber-400 font-extrabold">{userName}</span>
+              </>
+            )} 👋
           </h2>
-          <p className="text-xs text-slate-450 mt-1.5 flex items-center space-x-1.5">
+          <p className="text-[10px] md:text-xs text-slate-450 mt-1 flex items-center space-x-1.5">
             <span className="inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
             <span className="font-semibold text-slate-350">{userRole === "admin" ? "Founder & Admin" : "Goa BDM"}</span>
           </p>
         </div>
         
-        {/* Dynamic active badge on desktop */}
-        <div className="hidden sm:flex items-center space-x-2 bg-slate-950/60 border border-slate-850 px-3.5 py-1.5 rounded-xl shrink-0">
-          <Zap className="w-3.5 h-3.5 text-amber-400 animate-bounce" />
-          <span className="text-[10px] text-slate-350 font-bold uppercase tracking-wider">Clever Crow CRM Active</span>
+        {/* Buttons / Badges */}
+        <div className="flex items-center space-x-3 shrink-0">
+          <button
+            onClick={() => {
+              setActiveTab("leads");
+              if (onOpenAddLead) onOpenAddLead();
+            }}
+            className="flex items-center space-x-1.5 bg-amber-400 hover:bg-amber-500 text-black px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold transition-all active:scale-95 text-[10px] md:text-xs shadow-md cursor-pointer"
+          >
+            <PlusCircle className="w-3.5 h-3.5 md:w-4 md:h-4" />
+            <span>Add Client</span>
+          </button>
+          
+          <div className="hidden sm:flex items-center space-x-2 bg-slate-950/60 border border-slate-850 px-3.5 py-2.5 rounded-xl">
+            <Zap className="w-3.5 h-3.5 text-amber-400 animate-bounce" />
+            <span className="text-[10px] text-slate-350 font-bold uppercase tracking-wider">CRM Active</span>
+          </div>
         </div>
       </div>
 
@@ -339,8 +360,11 @@ export default function DashboardView({
         <h3 className="text-xs font-bold text-white uppercase tracking-wider pb-3 border-b border-slate-800/80 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <button
-            onClick={() => setActiveTab("leads")}
-            className="flex flex-col items-center justify-center p-4 bg-slate-950/60 border border-slate-850 hover:border-amber-400/30 rounded-xl text-center transition-all group"
+            onClick={() => {
+              setActiveTab("leads");
+              if (onOpenAddLead) onOpenAddLead();
+            }}
+            className="flex flex-col items-center justify-center p-4 bg-slate-950/60 border border-slate-850 hover:border-amber-400/30 rounded-xl text-center transition-all group cursor-pointer"
           >
             <PlusCircle className="w-5 h-5 text-amber-400 mb-2 group-hover:scale-110 transition-transform" />
             <span className="text-[11px] font-bold text-slate-350">Add Prospect</span>

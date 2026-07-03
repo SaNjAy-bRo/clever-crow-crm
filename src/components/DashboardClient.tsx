@@ -89,6 +89,7 @@ export default function DashboardClient({
   const [activities, setActivities] = useState<ActivityLog[]>(initialActivities);
   const [whitelist, setWhitelist] = useState<WhitelistEntry[]>(initialWhitelist);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [isAddLeadOpen, setIsAddLeadOpen] = useState(false);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "dark" | "light" || "dark";
@@ -355,6 +356,7 @@ export default function DashboardClient({
             userEmail={currentUserEmail}
             userName={currentUserName}
             setActiveTab={setActiveTab}
+            onOpenAddLead={() => setIsAddLeadOpen(true)}
           />
         );
       case "leads":
@@ -367,6 +369,8 @@ export default function DashboardClient({
             onAddLead={handleAddLead}
             onUpdateLead={handleUpdateLead}
             onDeleteLead={handleDeleteLead}
+            isAddOpen={isAddLeadOpen}
+            setIsAddOpen={setIsAddLeadOpen}
           />
         );
       case "followups":
