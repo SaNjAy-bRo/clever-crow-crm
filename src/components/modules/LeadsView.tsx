@@ -234,6 +234,35 @@ export default function LeadsView({
     setIsMapModalOpen(true);
   };
 
+  const handleRecenterGps = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+    
+    setGpsLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        if (mapRef.current) {
+          mapRef.current.setView([latitude, longitude], 15);
+        }
+        if (markerRef.current) {
+          markerRef.current.setLatLng([latitude, longitude]);
+        }
+        setTempCoords({ lat: latitude, lng: longitude });
+        reverseGeocode(latitude, longitude);
+        setGpsLoading(false);
+      },
+      (error) => {
+        console.error("GPS recenter error:", error);
+        alert(`Failed to fetch location: ${error.message}`);
+        setGpsLoading(false);
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
+
   const handleMapBlur = () => {
     let val = leadForm.googleMap.trim();
     if (!val) return;
@@ -1211,6 +1240,20 @@ export default function LeadsView({
                 className="h-80 w-full bg-slate-950 z-10"
                 style={{ minHeight: "320px" }}
               />
+              
+              {/* Floating GPS Recenter Button */}
+              {mapLoaded && (
+                <button
+                  type="button"
+                  onClick={handleRecenterGps}
+                  disabled={gpsLoading}
+                  className="absolute bottom-4 right-4 z-20 bg-amber-400 hover:bg-amber-500 disabled:bg-slate-800 text-black disabled:text-slate-500 p-2.5 rounded-full shadow-lg transition-all active:scale-95 border-none cursor-pointer flex items-center justify-center"
+                  title="Recenter to my current GPS location"
+                >
+                  <MapPin className="w-5 h-5 shrink-0" />
+                </button>
+              )}
+
               {!mapLoaded && (
                 <div className="absolute inset-0 bg-slate-950/80 flex items-center justify-center text-slate-400 text-xs z-20">
                   Loading map interface...
