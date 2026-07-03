@@ -244,6 +244,58 @@ async function main() {
     }
   });
 
+  console.log('Seeding meetings...');
+  await prisma.meeting.create({
+    data: {
+      clientId: c1.id,
+      date: f1Date,
+      type: 'Google Meet',
+      agenda: 'Initial discovery and requirement gathering.',
+      assignedTo: 'ashwin@clevercrow.in',
+      status: 'Completed',
+      afterMeetingUpdated: true,
+      proposalRequired: true
+    }
+  });
+
+  await prisma.meeting.create({
+    data: {
+      clientId: c4.id,
+      date: f2Date,
+      type: 'Client office visit',
+      agenda: 'Detailed proposal walkthrough and commercial negotiations.',
+      assignedTo: 'ashwin@clevercrow.in',
+      status: 'Scheduled'
+    }
+  });
+
+  console.log('Seeding proposals...');
+  await prisma.proposal.create({
+    data: {
+      clientId: c3.id,
+      title: 'E-commerce Website & WA Integration Proposal',
+      serviceOffered: 'E-commerce + Catalog Automation',
+      value: 200000,
+      date: new Date(),
+      sentBy: 'ashwin@clevercrow.in',
+      sentTo: 'sneha@lamoda.com',
+      status: 'Sent'
+    }
+  });
+
+  await prisma.proposal.create({
+    data: {
+      clientId: c4.id,
+      title: 'Restaurant CRM, POS & Ads Campaign Plan',
+      serviceOffered: 'POS + Google local search booster + Meta Ads',
+      value: 250000,
+      date: new Date(),
+      sentBy: 'ashwin@clevercrow.in',
+      sentTo: 'ashwin@spiceroute.com',
+      status: 'Negotiation'
+    }
+  });
+
   console.log('Seeding activity logs...');
   const logs = [
     { clientId: c1.id, userEmail: 'ashwin@clevercrow.in', action: 'Created Lead', details: 'Added Bean Brew Café as a hot prospect.' },
