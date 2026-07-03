@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-poppins), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
   
   /* Bind Tailwind text-size utilities to responsive CSS variables */
   --text-xs: var(--font-size-xs);
@@ -47,16 +47,16 @@
   --background: var(--bg-app);
   --foreground: var(--text-main);
   
-  /* Desktop size definitions (slightly scaled up) */
-  --font-size-xs: 0.8rem;
-  --font-size-sm: 0.925rem;
-  --font-size-base: 1.025rem;
-  --font-size-lg: 1.1875rem;
-  --font-size-xl: 1.3125rem;
-  --font-size-2xl: 1.625rem;
-  --font-size-3xl: 2.05rem;
-  --font-size-4xl: 2.45rem;
-  --font-size-5xl: 3.25rem;
+  /* Desktop size definitions (slightly scaled up for readability) */
+  --font-size-xs: 0.875rem;   /* Scaled up from 0.8rem (14px) */
+  --font-size-sm: 0.975rem;   /* Scaled up from 0.925rem (15.6px) */
+  --font-size-base: 1.075rem; /* Scaled up from 1.025rem (17.2px) */
+  --font-size-lg: 1.25rem;    /* Scaled up from 1.1875rem (20px) */
+  --font-size-xl: 1.375rem;   /* Scaled up from 1.3125rem (22px) */
+  --font-size-2xl: 1.7rem;    /* Scaled up from 1.625rem (27.2px) */
+  --font-size-3xl: 2.15rem;   /* Scaled up from 2.05rem (34.4px) */
+  --font-size-4xl: 2.55rem;   /* Scaled up from 2.45rem (40.8px) */
+  --font-size-5xl: 3.4rem;    /* Scaled up from 3.25rem (54.4px) */
 }
 
 .light {
@@ -75,15 +75,15 @@
 @media (max-width: 768px) {
   :root {
     /* Mobile-specific larger size definitions for improved readability */
-    --font-size-xs: 0.85rem;   /* +6% scaling on mobile */
-    --font-size-sm: 0.975rem;  /* +5% scaling on mobile */
-    --font-size-base: 1.075rem;
-    --font-size-lg: 1.25rem;
-    --font-size-xl: 1.375rem;
-    --font-size-2xl: 1.7rem;
-    --font-size-3xl: 2.15rem;
-    --font-size-4xl: 2.55rem;
-    --font-size-5xl: 3.4rem;
+    --font-size-xs: 0.925rem;   /* Scaled up from 0.85rem (14.8px) */
+    --font-size-sm: 1.025rem;   /* Scaled up from 0.975rem (16.4px) */
+    --font-size-base: 1.125rem; /* Scaled up from 1.075rem (18px) */
+    --font-size-lg: 1.3rem;     /* Scaled up from 1.25rem (20.8px) */
+    --font-size-xl: 1.45rem;    /* Scaled up from 1.375rem (23.2px) */
+    --font-size-2xl: 1.8rem;    /* Scaled up from 1.7rem (28.8px) */
+    --font-size-3xl: 2.25rem;   /* Scaled up from 2.15rem (36px) */
+    --font-size-4xl: 2.65rem;   /* Scaled up from 2.55rem (42.4px) */
+    --font-size-5xl: 3.55rem;   /* Scaled up from 3.4rem (56.8px) */
   }
 }
 
@@ -96,29 +96,29 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  letter-spacing: 0.02em; /* Increase letter spacing a little */
+  letter-spacing: 0.025em; /* Increase letter spacing a little for readability */
 }
 
 /* Custom overrides for arbitrary Tailwind CSS v4 pixel text size utility classes */
 .text-\[9px\] {
-  font-size: 10px !important;
+  font-size: 11px !important;
 }
 .text-\[10px\] {
-  font-size: 11.5px !important;
+  font-size: 13px !important;
 }
 .text-\[11px\] {
-  font-size: 12.5px !important;
+  font-size: 14px !important;
 }
 
 @media (max-width: 768px) {
   .text-\[9px\] {
-    font-size: 11px !important;
+    font-size: 12px !important;
   }
   .text-\[10px\] {
-    font-size: 12.5px !important;
+    font-size: 14px !important;
   }
   .text-\[11px\] {
-    font-size: 13.5px !important;
+    font-size: 15px !important;
   }
 }
 
