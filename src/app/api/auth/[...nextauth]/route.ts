@@ -23,12 +23,20 @@ export const authOptions: NextAuthOptions = {
           where: { email }
         });
         
+        const nameMap: Record<string, string> = {
+          "sanjay@clevercrow.in": "Sanjay Kumar",
+          "ashwin@clevercrow.in": "Ashwin",
+          "rohit@clevercrow.in": "Rohit Sharma",
+          "priya@clevercrow.in": "Priya Sen"
+        };
+        const displayName = nameMap[email] || "Sanjay Kumar";
+
         // Auto whitelist local users as Admin for testing ease
         if (!whitelisted) {
           whitelisted = await prisma.whitelist.create({
             data: {
               email,
-              name: "Local Tester",
+              name: displayName,
               role: "admin"
             }
           });
@@ -36,7 +44,7 @@ export const authOptions: NextAuthOptions = {
 
         return {
           id: email,
-          name: whitelisted.name || "Local Tester",
+          name: whitelisted.name || displayName,
           email: email,
           image: "https://lh3.googleusercontent.com/a/default-user=s96-c"
         };

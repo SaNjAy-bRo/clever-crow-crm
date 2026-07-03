@@ -137,14 +137,22 @@ export default function DashboardView({
     <div className="space-y-6 animate-in fade-in duration-300 font-sans pb-10">
       
       {/* 1. Header Greeting Section */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-light text-white leading-tight">
-            {getGreeting()}, <span className="text-amber-400 font-semibold">{userName}</span> 👋
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl relative overflow-hidden shadow-md">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/5 rounded-full blur-2xl pointer-events-none" />
+        <div className="min-w-0">
+          <h2 className="text-xl md:text-2xl font-light text-white leading-tight">
+            {getGreeting()}, <span className="text-amber-400 font-extrabold">{userName}</span> 👋
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            {userRole === "admin" ? "Founder & Admin" : "Goa BDM"}
+          <p className="text-xs text-slate-450 mt-1.5 flex items-center space-x-1.5">
+            <span className="inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+            <span className="font-semibold text-slate-350">{userRole === "admin" ? "Founder & Admin" : "Goa BDM"}</span>
           </p>
+        </div>
+        
+        {/* Dynamic active badge on desktop */}
+        <div className="hidden sm:flex items-center space-x-2 bg-slate-950/60 border border-slate-850 px-3.5 py-1.5 rounded-xl shrink-0">
+          <Zap className="w-3.5 h-3.5 text-amber-400 animate-bounce" />
+          <span className="text-[10px] text-slate-350 font-bold uppercase tracking-wider">Clever Crow CRM Active</span>
         </div>
       </div>
 
