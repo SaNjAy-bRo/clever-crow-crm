@@ -189,56 +189,56 @@ export default function DashboardView({
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* New Leads */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center space-x-3.5 shadow-md">
-          <div className="p-2.5 bg-amber-400/10 rounded-xl border border-amber-400/20 text-amber-400 shrink-0">
-            <Users className="w-5 h-5" />
+        <div className="bg-slate-900 border border-slate-800 p-3.5 md:p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center space-y-2.5 sm:space-y-0 sm:space-x-3.5 shadow-md">
+          <div className="p-2 md:p-2.5 bg-amber-400/10 rounded-lg md:rounded-xl border border-amber-400/20 text-amber-400 shrink-0">
+            <Users className="w-4 h-4 md:w-5 md:h-5" />
           </div>
-          <div className="min-w-0">
-            <span className="text-[10px] text-slate-400 font-bold uppercase block">New Leads</span>
-            <span className="text-xl font-extrabold text-white block mt-0.5">{totalProspects}</span>
-            <span className="text-[9px] text-emerald-400 font-medium block mt-1">
+          <div className="min-w-0 w-full">
+            <span className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase block tracking-wider">New Leads</span>
+            <span className="text-lg md:text-xl font-black text-white block mt-0.5 leading-none">{totalProspects}</span>
+            <span className="text-[8px] md:text-[9px] text-emerald-450 font-bold block mt-1.5 leading-none">
               +{newLeadsToday} added today
             </span>
           </div>
         </div>
 
         {/* Meetings */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center space-x-3.5 shadow-md">
-          <div className="p-2.5 bg-blue-500/10 rounded-xl border border-blue-500/20 text-blue-400 shrink-0">
-            <Video className="w-5 h-5" />
+        <div className="bg-slate-900 border border-slate-800 p-3.5 md:p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center space-y-2.5 sm:space-y-0 sm:space-x-3.5 shadow-md">
+          <div className="p-2 md:p-2.5 bg-blue-500/10 rounded-lg md:rounded-xl border border-blue-500/20 text-blue-400 shrink-0">
+            <Video className="w-4 h-4 md:w-5 md:h-5" />
           </div>
-          <div className="min-w-0">
-            <span className="text-[10px] text-slate-400 font-bold uppercase block">Meetings</span>
-            <span className="text-xl font-extrabold text-white block mt-0.5">{myMeetings.filter(m => m.status === "Completed").length}</span>
-            <span className="text-[9px] text-blue-400 font-medium block mt-1">
+          <div className="min-w-0 w-full">
+            <span className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase block tracking-wider">Meetings</span>
+            <span className="text-lg md:text-xl font-black text-white block mt-0.5 leading-none">{myMeetings.filter(m => m.status === "Completed").length}</span>
+            <span className="text-[8px] md:text-[9px] text-blue-450 font-bold block mt-1.5 leading-none">
               {meetingsBookedToday} booked today
             </span>
           </div>
         </div>
 
         {/* Proposals */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center space-x-3.5 shadow-md">
-          <div className="p-2.5 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-400 shrink-0">
-            <FileText className="w-5 h-5" />
+        <div className="bg-slate-900 border border-slate-800 p-3.5 md:p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center space-y-2.5 sm:space-y-0 sm:space-x-3.5 shadow-md">
+          <div className="p-2 md:p-2.5 bg-indigo-500/10 rounded-lg md:rounded-xl border border-indigo-500/20 text-indigo-400 shrink-0">
+            <FileText className="w-4 h-4 md:w-5 md:h-5" />
           </div>
-          <div className="min-w-0">
-            <span className="text-[10px] text-slate-400 font-bold uppercase block">Proposals</span>
-            <span className="text-xl font-extrabold text-white block mt-0.5">{myProposals.length}</span>
-            <span className="text-[9px] text-indigo-450 font-medium block mt-1">
+          <div className="min-w-0 w-full">
+            <span className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase block tracking-wider">Proposals</span>
+            <span className="text-lg md:text-xl font-black text-white block mt-0.5 leading-none">{myProposals.length}</span>
+            <span className="text-[8px] md:text-[9px] text-indigo-400 font-bold block mt-1.5 leading-none">
               In negotiation stages
             </span>
           </div>
         </div>
 
         {/* Collected Revenue */}
-        <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center space-x-3.5 shadow-md">
-          <div className="p-2.5 bg-emerald-500/10 rounded-xl border border-emerald-500/20 text-emerald-450 shrink-0">
-            <IndianRupee className="w-5 h-5" />
+        <div className="bg-slate-900 border border-slate-800 p-3.5 md:p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center space-y-2.5 sm:space-y-0 sm:space-x-3.5 shadow-md">
+          <div className="p-2 md:p-2.5 bg-emerald-500/10 rounded-lg md:rounded-xl border border-emerald-500/20 text-emerald-450 shrink-0">
+            <IndianRupee className="w-4 h-4 md:w-5 md:h-5" />
           </div>
-          <div className="min-w-0">
-            <span className="text-[10px] text-slate-400 font-bold uppercase block">Revenue Count</span>
-            <span className="text-xl font-extrabold text-white block mt-0.5">₹{monthlyRevenueCollected.toLocaleString()}</span>
-            <span className="text-[9px] text-emerald-400 font-medium block mt-1">
+          <div className="min-w-0 w-full">
+            <span className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase block tracking-wider">Revenue Count</span>
+            <span className="text-lg md:text-xl font-black text-white block mt-0.5 leading-none">₹{monthlyRevenueCollected.toLocaleString()}</span>
+            <span className="text-[8px] md:text-[9px] text-emerald-450 font-bold block mt-1.5 leading-none">
               Collected this month
             </span>
           </div>
