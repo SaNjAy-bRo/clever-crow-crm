@@ -210,16 +210,16 @@ export default function DashboardView({
 
         <div className="flex flex-col sm:grid sm:grid-cols-3 gap-3.5 sm:gap-4 mt-4 pb-4 border-b border-slate-800/60">
           <div className="flex justify-between items-center sm:block">
-            <span className="text-slate-400 text-xs sm:text-[10px]">Target</span>
-            <span className="text-lg font-black text-white mt-0.5 sm:mt-1">₹{targetRevenue.toLocaleString()}</span>
+            <span className="text-slate-400 text-xs sm:text-[10px] sm:block">Target</span>
+            <span className="text-lg font-black text-white mt-0.5 sm:mt-1 sm:block">₹{targetRevenue.toLocaleString()}</span>
           </div>
           <div className="flex justify-between items-center sm:block">
-            <span className="text-slate-400 text-xs sm:text-[10px]">Achieved</span>
-            <span className="text-lg font-black text-emerald-450 mt-0.5 sm:mt-1">₹{monthlyRevenueCollected.toLocaleString()}</span>
+            <span className="text-slate-400 text-xs sm:text-[10px] sm:block">Achieved</span>
+            <span className="text-lg font-black text-emerald-450 mt-0.5 sm:mt-1 sm:block">₹{monthlyRevenueCollected.toLocaleString()}</span>
           </div>
           <div className="flex justify-between items-center sm:block sm:text-right">
             <span className="text-slate-400 text-xs sm:text-[10px] sm:block">Achievement</span>
-            <span className="text-lg font-black text-amber-400 mt-0.5 sm:mt-1">{achievedPercent}%</span>
+            <span className="text-lg font-black text-amber-400 mt-0.5 sm:mt-1 sm:block">{achievedPercent}%</span>
           </div>
         </div>
 
