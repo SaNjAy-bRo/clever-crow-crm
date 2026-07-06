@@ -342,6 +342,42 @@ export default function DashboardClient({
 
   // Switch Render View
   const renderActiveModule = () => {
+    // Role-based client-side tab guards
+    const tabRoleMap: Record<string, string[]> = {
+      dashboard: ["admin", "manager", "bdm", "telecaller", "team_member"],
+      leads: ["admin", "manager", "bdm", "telecaller"],
+      followups: ["admin", "manager", "bdm"],
+      meetings: ["admin", "manager", "bdm", "telecaller"],
+      proposals: ["admin", "manager", "bdm", "team_member"],
+      deals: ["admin", "manager", "bdm"],
+      targets: ["admin", "manager", "bdm"],
+      clients: ["admin", "manager", "bdm", "team_member"],
+      activities: ["admin", "manager", "bdm"],
+      reports: ["admin", "manager"],
+      templates: ["admin", "manager", "bdm", "telecaller"],
+      whitelist: ["admin"]
+    };
+
+    const allowedRoles = tabRoleMap[activeTab] || [];
+    if (allowedRoles.length > 0 && !allowedRoles.includes(currentUserRole)) {
+      // Fallback component if tab is restricted for this user role
+      return (
+        <DashboardView
+          clients={clients}
+          activities={activities}
+          followUps={followUps}
+          meetings={meetings}
+          proposals={proposals}
+          targets={targets}
+          userRole={currentUserRole}
+          userEmail={currentUserEmail}
+          userName={currentUserName}
+          setActiveTab={setActiveTab}
+          onOpenAddLead={() => setIsAddLeadOpen(true)}
+        />
+      );
+    }
+
     switch (activeTab) {
       case "dashboard":
         return (

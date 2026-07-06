@@ -11,8 +11,8 @@ export async function GET(request: Request) {
 
   try {
     const { searchParams } = new URL(request.url);
-    const month = searchParams.get("month") ? parseInt(searchParams.get("month")!) : new Date().getMonth() + 1;
-    const year = searchParams.get("year") ? parseInt(searchParams.get("year")!) : new Date().getFullYear();
+    const monthParam = searchParams.get("month");
+    const yearParam = searchParams.get("year");
 
     // Check role of current user
     const dbUser = await prisma.whitelist.findUnique({
@@ -20,20 +20,17 @@ export async function GET(request: Request) {
     });
     const role = dbUser?.role || "user";
 
-    let targets;
-    if (role === "admin" || role === "manager") {
-      targets = await prisma.target.findMany({
-        where: { month, year }
-      });
-    } else {
-      targets = await prisma.target.findMany({
-        where: {
-          bdmEmail: session.user.email.toLowerCase(),
-          month,
-          year
-        }
-      });
+    const whereClause: any = {};
+    if (monthParam) whereClause.month = parseInt(monthParam);
+    if (yearParam) whereClause.year = parseInt(yearParam);
+
+    if (role !== "admin" && role !== "manager") {
+      whereClause.bdmEmail = session.user.email.toLowerCase();
     }
+
+    const targets = await prisma.target.findMany({
+      where: whereClause
+    });
 
     return NextResponse.json(targets);
   } catch (error) {

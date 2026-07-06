@@ -66,6 +66,21 @@ export async function POST(request: Request) {
     }
 
     const data = validationResult.data;
+
+    // Check role of current user
+    const dbUser = await prisma.whitelist.findUnique({
+      where: { email: session.user.email.toLowerCase() },
+    });
+    const role = dbUser?.role || "user";
+
+    if (role !== "admin") {
+      if (data.status === "Closed Won" || data.isConvertedClient === true) {
+        return NextResponse.json(
+          { error: "Forbidden: Only administrators can set status to Closed Won / Converted Client" },
+          { status: 403 }
+        );
+      }
+    }
     
     const client = await prisma.client.create({
       data: {

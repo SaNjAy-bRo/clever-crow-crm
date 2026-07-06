@@ -91,6 +91,23 @@ export async function PATCH(
       return NextResponse.json({ error: "Client not found" }, { status: 404 });
     }
 
+    // Check role of current user
+    const dbUser = await prisma.whitelist.findUnique({
+      where: { email: session.user.email.toLowerCase() },
+    });
+    const role = dbUser?.role || "user";
+
+    if (role !== "admin") {
+      const statusChangedToWon = existing.status !== "Closed Won" && data.status === "Closed Won";
+      const convertedChangedToTrue = !existing.isConvertedClient && data.isConvertedClient === true;
+      if (statusChangedToWon || convertedChangedToTrue) {
+        return NextResponse.json(
+          { error: "Forbidden: Only administrators can set status to Closed Won / Converted Client" },
+          { status: 403 }
+        );
+      }
+    }
+
     // Determine what changed
     const changes: string[] = [];
     if (existing.name !== data.name) changes.push(`Name: "${existing.name}" → "${data.name}"`);

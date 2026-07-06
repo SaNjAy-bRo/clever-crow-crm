@@ -652,10 +652,14 @@ export default function LeadsView({
                     <span className="text-[10px] text-slate-500 block font-semibold">Pipeline Stage</span>
                     <select
                       value={lead.status}
+                      disabled={lead.status === "Closed Won" && userRole !== "admin"}
                       onChange={(e) => handleStatusChange(lead.id, e.target.value)}
-                      className="w-full mt-1.5 bg-slate-950 border border-slate-800 py-1.5 px-3 rounded-lg text-xs text-slate-300 focus:outline-none"
+                      className="w-full mt-1.5 bg-slate-950 border border-slate-800 py-1.5 px-3 rounded-lg text-xs text-slate-300 focus:outline-none disabled:opacity-75 disabled:cursor-not-allowed"
                     >
-                      {pipelineStages.map(s => <option key={s} value={s}>{s}</option>)}
+                      {pipelineStages
+                        .filter(s => s !== "Closed Won" || userRole === "admin" || lead.status === "Closed Won")
+                        .map(s => <option key={s} value={s}>{s}</option>)
+                      }
                     </select>
                   </div>
 
@@ -950,10 +954,14 @@ export default function LeadsView({
                   <label className="text-[10px] text-slate-400 font-bold uppercase block mb-1">Lead Status</label>
                   <select
                     value={leadForm.status}
+                    disabled={selectedLead?.status === "Closed Won" && userRole !== "admin"}
                     onChange={(e) => setLeadForm({ ...leadForm, status: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-850 p-2.5 rounded-xl text-xs text-slate-350 focus:outline-none"
+                    className="w-full bg-slate-950 border border-slate-850 p-2.5 rounded-xl text-xs text-slate-350 focus:outline-none disabled:opacity-75 disabled:cursor-not-allowed"
                   >
-                    {pipelineStages.map(s => <option key={s} value={s}>{s}</option>)}
+                    {pipelineStages
+                      .filter(s => s !== "Closed Won" || userRole === "admin" || selectedLead?.status === "Closed Won")
+                      .map(s => <option key={s} value={s}>{s}</option>)
+                    }
                   </select>
                 </div>
               </div>
