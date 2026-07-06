@@ -63,6 +63,8 @@ export default function DashboardView({
   thisMonthStart.setDate(1);
   thisMonthStart.setHours(0, 0, 0, 0);
 
+  const thisMonthEnd = new Date(thisMonthStart.getFullYear(), thisMonthStart.getMonth() + 1, 0, 23, 59, 59, 999);
+
   // Filter lists based on role
   const isBdm = userRole === "bdm" || userRole === "telecaller";
   const myClients = isBdm ? clients.filter(c => c.dealOwnerEmail === userEmail) : clients;
@@ -91,8 +93,8 @@ export default function DashboardView({
 
   // Monthly revenue calculations (collected revenue)
   const monthlyRevenueCollected = myClients.reduce((sum, c) => {
-    const d = new Date(c.updatedAt);
-    if (c.status === "Closed Won" && d >= thisMonthStart) {
+    const d = c.clientStartDate ? new Date(c.clientStartDate) : new Date(c.updatedAt);
+    if (c.status === "Closed Won" && d >= thisMonthStart && d <= thisMonthEnd) {
       const adv = c.advanceAmount || 0;
       const bal = c.paymentStatus === "Fully collected" || c.paymentStatus === "Fully Paid" ? c.balanceAmount : 0;
       return sum + adv + bal;

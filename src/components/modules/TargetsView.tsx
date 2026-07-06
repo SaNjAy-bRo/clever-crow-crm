@@ -85,7 +85,7 @@ export default function TargetsView({
 
     // 3. Count closed won revenue collected
     const collectedRevenue = bdmClients.reduce((sum, c) => {
-      const d = new Date(c.updatedAt);
+      const d = c.clientStartDate ? new Date(c.clientStartDate) : new Date(c.updatedAt);
       if (c.status === "Closed Won" && d >= thisMonthStart && d <= thisMonthEnd) {
         const adv = c.advanceAmount || 0;
         const bal = c.paymentStatus === "Fully collected" || c.paymentStatus === "Fully Paid" ? c.balanceAmount : 0;
@@ -94,8 +94,11 @@ export default function TargetsView({
       return sum;
     }, 0);
 
-    // 4. Count proposals sent
-    const wonCount = bdmClients.filter(c => c.status === "Closed Won").length;
+    // 4. Count won deals in the selected month
+    const wonCount = bdmClients.filter(c => {
+      const d = c.clientStartDate ? new Date(c.clientStartDate) : new Date(c.updatedAt);
+      return c.status === "Closed Won" && d >= thisMonthStart && d <= thisMonthEnd;
+    }).length;
 
     return {
       prospects: prospectsAdded,

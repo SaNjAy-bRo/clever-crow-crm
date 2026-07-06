@@ -45,6 +45,7 @@ export default function ReportsView({
   startOfWeek.setHours(0, 0, 0, 0);
 
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
 
   // Helper: Export to CSV (Client-side)
   const downloadCSV = (data: any[], filename: string) => {
@@ -128,17 +129,20 @@ export default function ReportsView({
   };
 
   // --- 3. MONTHLY REPORT CALCULATIONS ---
-  const monthlyLeads = clients.filter(c => new Date(c.createdAt) >= startOfMonth);
-  const monthlyWonLeads = clients.filter(c => c.status === "Closed Won" && new Date(c.updatedAt) >= startOfMonth);
-  const monthlyLostLeads = clients.filter(c => c.status === "Closed Lost" && new Date(c.updatedAt) >= startOfMonth);
+  const monthlyLeads = clients.filter(c => new Date(c.createdAt) >= startOfMonth && new Date(c.createdAt) <= endOfMonth);
+  const monthlyWonLeads = clients.filter(c => {
+    const d = c.clientStartDate ? new Date(c.clientStartDate) : new Date(c.updatedAt);
+    return c.status === "Closed Won" && d >= startOfMonth && d <= endOfMonth;
+  });
+  const monthlyLostLeads = clients.filter(c => c.status === "Closed Lost" && new Date(c.updatedAt) >= startOfMonth && new Date(c.updatedAt) <= endOfMonth);
 
   const conversionRate = monthlyLeads.length > 0 
     ? Math.round((monthlyWonLeads.length / monthlyLeads.length) * 100) 
     : 0;
 
   const monthlyCollectedRevenue = clients.filter(c => {
-    const d = new Date(c.updatedAt);
-    return c.status === "Closed Won" && d >= startOfMonth;
+    const d = c.clientStartDate ? new Date(c.clientStartDate) : new Date(c.updatedAt);
+    return c.status === "Closed Won" && d >= startOfMonth && d <= endOfMonth;
   }).reduce((s, c) => s + (c.advanceAmount || 0) + (c.paymentStatus === "Fully collected" || c.paymentStatus === "Fully Paid" ? c.balanceAmount : 0), 0);
 
   // Group by Lead Source
