@@ -536,23 +536,22 @@ export default function DashboardClient({
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         
         {/* Top Navbar Header on Mobile / Small screens */}
-        <header className="flex md:hidden items-center justify-between p-4 bg-slate-900 border-b border-slate-800 shrink-0">
+        <header className="flex md:hidden items-center justify-between p-4 bg-[#ffffff] border-b border-[#e2e8f0] shrink-0">
           <div className="flex items-center space-x-2">
-            <img src="/CSS.svg" alt="Clever Crow" className="h-8 w-8 object-contain bg-white rounded-full p-1" />
-            <span className="text-xs font-black text-white tracking-widest">CLEVER CROW</span>
+            <img src="/logo-1.png" alt="Logo" className="h-12 w-auto object-contain" />
           </div>
           
           <div className="flex items-center space-x-2">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-xl bg-slate-800 text-amber-450 hover:bg-slate-700 transition-all cursor-pointer"
+              className="p-2 rounded-xl bg-[#f1f5f9] text-[#475569] hover:bg-[#e2e8f0] transition-all cursor-pointer border border-[#e2e8f0]"
               title="Toggle Theme"
             >
-              {theme === "light" ? <Moon className="w-4 h-4 text-indigo-400" /> : <Sun className="w-4 h-4 text-amber-400" />}
+              {theme === "light" ? <Moon className="w-4 h-4 text-indigo-500" /> : <Sun className="w-4 h-4 text-amber-500" />}
             </button>
             <button
               onClick={() => setIsMobileOpen(true)}
-              className="p-2 rounded-xl bg-slate-800 text-slate-350 hover:text-white transition-all"
+              className="p-2 rounded-xl bg-[#f1f5f9] text-[#475569] hover:bg-[#e2e8f0] transition-all border border-[#e2e8f0]"
             >
               <Menu className="w-4 h-4" />
             </button>

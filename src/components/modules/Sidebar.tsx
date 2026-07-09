@@ -80,19 +80,13 @@ export default function Sidebar({
   const navContent = (
     <div className="flex flex-col h-full bg-slate-900 border-r border-slate-800 text-slate-300 font-sans">
       {/* Brand Header */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-800 shrink-0">
+      <div className="flex items-center justify-between p-4 bg-[#ffffff] border-b border-[#e2e8f0] shrink-0">
         <div className="flex items-center space-x-3">
-          <img src="/CSS.svg" alt="Logo" className="h-10 w-10 p-1 bg-white rounded-full object-contain shadow-sm" />
-          {!isCollapsed && (
-            <div className="flex flex-col animate-in fade-in duration-200">
-              <span className="text-sm font-extrabold text-white tracking-wider leading-none">CLEVER CROW</span>
-              <span className="text-[10px] text-amber-400 font-semibold tracking-widest mt-1">CRM PLATFORM</span>
-            </div>
-          )}
+          <img src="/logo-1.png" alt="Logo" className="h-16 w-auto object-contain" />
         </div>
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)} 
-          className="hidden md:flex p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-all active:scale-95"
+          className="hidden md:flex p-1.5 rounded-lg bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#475569] hover:text-[#0f172a] transition-all active:scale-95 border border-[#e2e8f0]"
         >
           {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
         </button>
